@@ -11,7 +11,9 @@ const labelprops = {
 };
 
 const CastSubmission = () => {
-  const { movieId } = useParams(); // Get the movieId from the route parameters
+  const { id } = useParams();
+console.log('Movie ID:', id);
+ // Get the movieId from the route parameters
 
   const [cast, setCast] = useState({
     celebName: '',
@@ -26,22 +28,41 @@ const CastSubmission = () => {
     });
   };
 
+  // const addHandler = async (e) => {
+  //   try {
+  //     const payload = [cast];
+  //     console.log('Request Payload:', payload);
+  //     const response = await axios.post(`http://127.0.0.1:4000/page/addcelebtomovie/${id}`, payload);
+  //     console.log('Response:', response.data);
+  //     toast.success(response.data.message, { position: 'top-right' });
+  //   } catch (err) {
+  //     console.log('Error in axios request', err);
+  //   }
+  // };
+  
   const addHandler = async (e) => {
     try {
-      await axios.post(`http://127.0.0.1:4000/page/addcelebtomovie/${movieId}`, cast);
-      // Assuming your backend route for adding cast includes the movieId as a parameter
-
+      const payload = [cast];
+      console.log('Request Payload:', payload);
+      const response = await axios.post(`http://127.0.0.1:4000/page/addcelebtomovie/${id}`, payload);
+      console.log('Response:', response.data);
+      toast.success(response.data.message, { position: 'top-right' });
+  
+      // Update local state with the new cast information
       setCast({
         celebName: '',
         celebRole: '',
         celebImage: '',
       });
-
-      toast.success('Cast added successfully', { position: 'top-right' });
-    } catch (error) {
-      console.log('Error in axios request', error);
+    } catch (err) {
+      console.log('Error in axios request', err);
     }
   };
+  
+  
+  
+
+
 
   return (
     <Sidebar>
@@ -58,7 +79,12 @@ const CastSubmission = () => {
             <Typography textAlign={'center'} variant="h5" fontFamily={'verdana'}>
               Add Cast
             </Typography>
-            {/* Your form fields for cast submission */}
+            <FormLabel sx={labelprops}>Name</FormLabel>
+                <TextField name='celebName' variant='standard' margin='normal' onChange={inputHandler}/>
+                <FormLabel sx={labelprops}>Role</FormLabel>
+                <TextField name='celebRole' variant='standard' margin='normal' onChange={inputHandler}/>
+                <FormLabel sx={labelprops}>Image Url</FormLabel>
+                <TextField name='celebImage' variant='standard' margin='normal' onChange={inputHandler}/>
             <Button
               variant="contained"
               sx={{

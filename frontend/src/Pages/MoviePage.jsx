@@ -14,20 +14,34 @@ const MoviePage = () => {
   const [moviePage, setMoviePage] = useState([]);
   const navigate = useNavigate();
 
-    const { title } = useParams(); // Extract title from route parameters
+    const { title ,id } = useParams(); // Extract title from route parameters
 
+
+  // useEffect(() => {
+  //   console.log("Fetching data...");
+  //   axios.get(`http://127.0.0.1:4000/page/movies`)
+  //     .then((res) => {
+  //       console.log("Data fetched:", res.data);
+  //       setMoviePage(res.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // }, []);
 
   useEffect(() => {
     console.log("Fetching data...");
     axios.get(`http://127.0.0.1:4000/page/movies`)
-      .then((res) => {
-        console.log("Data fetched:", res.data);
-        setMoviePage(res.data);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
+    .then((res) => {
+      console.log("Data fetched:", res.data);
+      setMoviePage(res.data);
+    })
+    .catch((error) => {
+      console.error("Error fetching data:", error);
+    });
+  
   }, []);
+  
 
   // Check if the title is not available yet
   if (!title) {
@@ -63,7 +77,11 @@ const MoviePage = () => {
     releasedate,
     description,
     cast,
+    
   } = selectedMovie;
+ 
+
+
 
   return (
     <>
@@ -132,43 +150,45 @@ const MoviePage = () => {
   
           {
                 cast.length > 0 && (
-                    <div className='circlecardslider'>
-                        <div className='line'></div>
 
-                        <h1>Cast</h1>
-                        <Swiper
-                            slidesPerView={1}
-                            spaceBetween={1}
-                            pagination={{
-                                clickable: true,
-                            }}
-                            breakpoints={{
-                                '@0.00': {
-                                    slidesPerView: 1,
-                                    spaceBetween: 2,
-                                },
-                                '@0.75': {
-                                    slidesPerView: 2,
-                                    spaceBetween: 2,
-                                },
-                                '@1.00': {
-                                    slidesPerView: 3,
-                                    spaceBetween: 2,
-                                },
-                                '@1.50': {
-                                    slidesPerView: 6,
-                                    spaceBetween: 2,
-                                },
-                            }}
-                            className="mySwiper"
-                        >
-                            {cast.map((celeb, index) => (
-                                <SwiperSlide key={index}>
-                                    <CelebCard {...celeb} />
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-                    </div>
+                  <div className='circlecardslider'>
+                  <div className='line'>
+              
+                  <h1>Cast</h1>
+                  <Swiper
+                      slidesPerView={1}
+                      spaceBetween={1}
+                      pagination={{
+                          clickable: true,
+                      }}
+                      breakpoints={{
+                          '@0.00': {
+                              slidesPerView: 1,
+                              spaceBetween: 2,
+                          },
+                          '@0.75': {
+                              slidesPerView: 2,
+                              spaceBetween: 2,
+                          },
+                          '@1.00': {
+                              slidesPerView: 3,
+                              spaceBetween: 2,
+                          },
+                          '@1.50': {
+                              slidesPerView: 6,
+                              spaceBetween: 2,
+                          },
+                      }}
+                      className="mySwiper"
+                  >
+                      {cast.map((celeb, index) => (
+                          <SwiperSlide key={index}>
+                              <CelebCard {...celeb} />
+                          </SwiperSlide>
+                      ))}
+                  </Swiper>
+              </div>
+          </div>    
                 )
 }
 

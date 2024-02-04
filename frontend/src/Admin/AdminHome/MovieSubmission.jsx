@@ -3,7 +3,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const labelprops = {
   mt: 1,
@@ -11,6 +11,7 @@ const labelprops = {
 };
 
 const MovieSubmission = () => {
+  const { id } = useParams()
   const [movie, setMovie] = useState({
     title: '',
     description: '',
@@ -31,21 +32,16 @@ const MovieSubmission = () => {
       [e.target.name]: e.target.value,
     });
   };
-
   const addHandler = async (e) => {
     try {
       const response = await axios.post('http://127.0.0.1:4000/page/createmovie', movie);
-      const { message, movie: createdMovie } = response.data; // Extracting movie data from the response
+      const { id, message } = response.data;
   
-      setMovie(createdMovie);
-  
+      setMovie(response.data);
       toast.success(message, { position: 'top-right' });
-  
-      // After successful movie creation, navigate to the cast submission page for the same movie
-      navigate(`/cast/${createdMovie._id.toString()}`);
-
-    } catch (error) {
-      console.log('Error in axios request', error);
+      navigate(`/cast/${id}`);
+    } catch (err) {
+      console.log('Error in axios request', err);
     }
   };
   

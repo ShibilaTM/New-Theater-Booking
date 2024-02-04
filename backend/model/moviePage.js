@@ -43,7 +43,6 @@ const moviePageSchema = new Schema({
         required: true
     },
     cast: [{
-        celebType:String,
         celebName:String,
         celebRole:String,
         celebImage:String

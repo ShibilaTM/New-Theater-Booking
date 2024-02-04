@@ -9,18 +9,45 @@ const mongoose = require('mongoose')
 const emailService = require('../utilities/emailService')
 
 //Posting the details of movie page
+// router.post('/createmovie', async (req, res) => {
+//     try {
+//         const {title,description,potraitImgUrl,landScapeImgUrl,rating,genre,languages,type,duration,releasedate} = req.body
+      
+//         const newMovie = new movieModel({title,description,potraitImgUrl,landScapeImgUrl,rating,genre,languages,type,duration,releasedate})
+//         const savedData= await newMovie.save()
+//         return res.status(200).json({savedData,message:'Successfully Added' });
+    
+//     } catch (error) {
+//         res.status(500).json({ error });
+//     }
+// });
+
 router.post('/createmovie', async (req, res) => {
     try {
-        const {title,description,potraitImgUrl,landScapeImgUrl,rating,genre,languages,type,duration,releasedate} = req.body
-      
-        const newMovie = new movieModel({title,description,potraitImgUrl,landScapeImgUrl,rating,genre,languages,type,duration,releasedate})
-        const savedData= await newMovie.save()
-        return res.status(200).json({savedData,message:'Successfully Added' });
-    
+      const { title, description, potraitImgUrl, landScapeImgUrl, rating, genre, languages, type, duration, releasedate } = req.body;
+  
+      const newMovie = new movieModel({
+        title,
+        description,
+        potraitImgUrl,
+        landScapeImgUrl,
+        rating,
+        genre,
+        languages,
+        type,
+        duration,
+        releasedate,
+      });
+  
+      const savedData = await newMovie.save();
+  
+      // Include the movie id in the response
+      return res.status(201).json({ id: savedData._id, message: 'Successfully Added' });
     } catch (error) {
-        res.status(500).json({ error });
+      console.error('Error creating movie:', error);
+      return res.status(500).json({ error });
     }
-});
+  });
 
 //To get movie with title,potraitImgUrl,genre,rating
 router.get('/getmovies', async (req, res) => {
@@ -87,40 +114,43 @@ router.get('/getmovie/:id', async (req, res) => {
 
 router.post('/addcelebtomovie/:id', async (req, res) => {
     try {
-        const id = req.params.id
-        const { cast } = req.body;
-
-        if (!id) {
-            return res.status(400).json({ message: "Missing movieId in request body" });
-        }
-
-        const movie = await movieModel.findById(id);
-
-        if (!movie) {
-            return res.status(404).json({ message: "Movie not found" });
-        }
-
-        if (!cast || !Array.isArray(cast)) {
-            return res.status(400).json({ message: "Invalid or missing cast array in request body" });
-        }
-
-        // Assuming all celebrities are of type "cast"
-        const newCelebs = cast.map(({ celebName, celebRole, celebImage }) => ({
-            celebType: "cast",
-            celebName,
-            celebRole,
-            celebImage
-        }));
-
-        movie.cast.push(...newCelebs);
-        await movie.save();
-
-        return res.status(200).json({ message: "Celebs added successfully" });
+      const movieId = req.params.id;
+      const castArray = req.body;
+  
+      console.log('Received movieId:', movieId);
+      console.log('Received castArray:', castArray);
+  
+      if (!movieId) {
+        return res.status(400).json({ message: 'Missing movieId in request params' });
+      }
+  
+      const movie = await movieModel.findById(movieId);
+  
+      if (!movie) {
+        return res.status(404).json({ message: 'Movie not found' });
+      }
+  
+      if (!castArray || !Array.isArray(castArray)) {
+        return res.status(400).json({ message: 'Invalid or missing cast array in request body' });
+      }
+  
+      // Assuming all celebrities are of type "cast"
+      const newCelebs = castArray.map(({ celebName, celebRole, celebImage }) => ({
+        celebName,
+        celebRole,
+        celebImage,
+      }));
+  
+      movie.cast.push(...newCelebs);
+      await movie.save();
+  
+      return res.status(201).json({ message: 'Successfully Added' });
     } catch (error) {
-        console.error("Error adding celebs to movie:", error);
-        res.status(500).json({ error: "Internal server error" });
+      console.error('Error adding celebs to movie:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
-});
+  });
+  
 
 router.post('/booktickets', async (req, res) => {
     try {
