@@ -1,0 +1,119 @@
+
+/* Original styles for larger screens */
+ nav {
+    background-color: rgb(78, 77, 77);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+/* Styles for left section */
+nav .left {
+    display: flex;
+    align-items: center;
+}
+
+nav img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+.searchbox {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: 4px;
+    padding: 10px;
+    margin-left: 10px;
+    width: 400px;
+}
+
+.searchbtn {
+    margin-right: 5px;
+    font-size: 1.2rem;
+    color: rgb(78, 77, 77);
+}
+
+input[type='text'] {
+    border: none;
+    outline: none;
+    background: none;
+}
+.left .dropdown{
+    display: flex;
+    align-items: center;
+    margin: 0px 20px;
+    cursor: pointer;
+}
+
+/* Styles for right section */
+.right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+
+.login-dropdown {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background-color: rgb(252, 110, 28);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 10px;
+}
+
+
+.login-dropdown:hover {
+    background-color: darkorange;
+}
+
+.dropicon {
+    font-size: 20px;
+}
+
+.signup {
+    background-color: rgb(252, 110, 28);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    text-decoration: none;
+}
+.mobile-menu-icon{
+    margin-right: 15px;
+    color:rgb(252, 110, 28) ;
+    cursor: pointer;
+}
+.linkstylenone{
+    text-decoration: none;
+    color: white;
+    margin-right: 20px;
+}
+.theme_icon1{
+    font-size: 1.5rem;
+}
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .right {
+        margin-top: 10px;
+        justify-content: flex-start;
+    }
+
+    .searchbox {
+        width: 100%;
+        margin: 10px 0;
+    }
+}

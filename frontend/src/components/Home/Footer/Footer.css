@@ -1,0 +1,129 @@
+.section_padding {
+    padding: 4rem 4rem;
+}
+
+.footer {
+    background-color: rgb(78, 77, 77);
+    color: white;
+    margin-top: 25px;
+}
+
+.sb_footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+.sb_footer-links-div {
+    width: 150px;
+    
+    margin: 0.5rem; 
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+.socialmedia {
+    display: flex;
+    flex-direction: none;
+}
+
+.socialmedia p {
+    width: 100%;
+}
+
+.sb_footer-links-div h4 {
+    font-size: 14px;
+    line-height: 17px;
+    margin-bottom: 0.9rem;
+}
+
+.sb_footer-links-div p {
+    font-size: 12px;
+    line-height: 15px;
+    margin: 0.5rem 0;
+    cursor: pointer;
+}
+
+.sb_footer-below {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;    
+    margin-top: 0.5rem;
+}
+
+.sb_footer-below-links p {
+    font-size: 13px;
+    line-height: 15px;
+    margin-left: 1.5rem;
+    color: white;
+    font-weight: 600;
+}
+
+hr {
+    color: white;
+    width: 100%;
+}
+
+.sb_footer-copyright {
+    text-align: center;
+    font-size: 13px;
+    line-height: 15px;
+    color:  rgb(175, 175, 179);;
+    font-weight: 600;
+    max-width: 400px; /* Set a max-width to allow centering */
+}
+
+.sb_footer-links-div p .icons{
+    margin-right: 5px;
+}
+
+@media screen and (max-width: 768px) { /* Fix typo here */
+    .sb_footer-heading h1 {
+        font-size: 34px;
+        line-height: 42px;
+    }
+
+    .sb_footer-links div {
+        margin: 1rem 0;
+    }
+
+    .sb_footer-copyright {
+        text-align: center;
+    }
+
+    .sb_footer-below {
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+    }
+
+    .sb_footer-below-links {
+        flex-direction: column;
+    }
+
+    .sb_footer-below-links p {
+        margin-left: 0rem;
+        margin-top: 1rem;
+    }
+}
+
+
+/* @media screen and (max-width: 850px){
+    .sb_footer-heading h1{
+        font-size: 44px;
+        line-height: 50px;
+    }
+} */
+/* @media screen and (max-width: 400px){
+    .sb_footer-heading h1{
+        font-size: 27px;
+        line-height: 38px;
+    }
+} */
