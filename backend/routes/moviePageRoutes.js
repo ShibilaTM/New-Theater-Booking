@@ -112,45 +112,43 @@ router.get('/getmovie/:id', async (req, res) => {
 //     }
 // });
 
+// To add cast
 router.post('/addcelebtomovie/:id', async (req, res) => {
-    try {
-      const movieId = req.params.id;
-      const castArray = req.body;
-  
-      console.log('Received movieId:', movieId);
-      console.log('Received castArray:', castArray);
-  
-      if (!movieId) {
-        return res.status(400).json({ message: 'Missing movieId in request params' });
+  try {
+      const id = req.params.id
+      const cast  = req.body;
+
+      if (!id) {
+          return res.status(400).json({ message: "Missing movieId in request body" });
       }
-  
-      const movie = await movieModel.findById(movieId);
-  
+
+      const movie = await movieModel.findById(id);
+
       if (!movie) {
-        return res.status(404).json({ message: 'Movie not found' });
+          return res.status(404).json({ message: "Movie not found" });
       }
-  
-      if (!castArray || !Array.isArray(castArray)) {
-        return res.status(400).json({ message: 'Invalid or missing cast array in request body' });
+
+      if (!cast || !Array.isArray(cast)) {
+          return res.status(400).json({ message: "Invalid or missing cast array in request body" });
       }
-  
+
       // Assuming all celebrities are of type "cast"
-      const newCelebs = castArray.map(({ celebName, celebRole, celebImage }) => ({
-        celebName,
-        celebRole,
-        celebImage,
+      const newCelebs = cast.map(({ celebName, celebRole, celebImage }) => ({
+          
+          celebName,
+          celebRole,
+          celebImage
       }));
-  
+
       movie.cast.push(...newCelebs);
       await movie.save();
-  
-      return res.status(201).json({ message: 'Successfully Added' });
-    } catch (error) {
-      console.error('Error adding celebs to movie:', error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  });
-  
+
+      return res.status(200).json({ message: "Celebs added successfully" });
+  } catch (error) {
+      console.error("Error adding celebs to movie:", error);
+      res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 router.post('/booktickets', async (req, res) => {
     try {
