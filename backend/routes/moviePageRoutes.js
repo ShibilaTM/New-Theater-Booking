@@ -185,6 +185,22 @@ router.post('/booktickets', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+  //Update Movie
+  router.put('/update/:id',async(req,res)=>{
+    try {
+      const id = req.params.id
+      const movieExist = await movieModel.findById(id)
+      if(!movieExist){
+         return res.status(404).json({message:'user data not found'})
+      }
+      const data = req.body
+      const updateData = await movieModel.findByIdAndUpdate(id,data,{new:true})
+      res.status(200).json({message:'updated successfully'})
+  } catch (error) {
+      res.status(500).json({error:error})
+  }
+  })
   
   //Delete movie 
   router.delete('/remove/:id',async(req,res)=>{

@@ -13,6 +13,7 @@ import AdminMain from './Admin/Sidebar/AdminMain';
 import MovieTicketBooking from './Pages/BuyTickets/MovieTicketBooking';
 import MovieSubmission from './Admin/AdminHome/MovieSubmission';
 import CastSubmission from './Admin/AdminHome/CastSubmission';
+import EditMovie from './Admin/AdminHome/EditMovie';
 
 
 
@@ -32,6 +33,7 @@ function App() {
         <Route path="/admindashboard" element={<AdminHome/>}/>
         <Route path='/moviesubmission' element={<MovieSubmission/>}/>
         <Route path='/cast/:id' element={<CastSubmission/>}/>
+        <Route path='/edit/:id' element={<EditMovie/>}/>
         
       </Routes>
     </div>

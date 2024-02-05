@@ -4,7 +4,7 @@ import './Sidebar.css';
 import { FaTh, FaBars } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import { IoLogOut } from 'react-icons/io5';
-import { MdMovieCreation, MdMovieFilter, MdMovieEdit } from 'react-icons/md';
+import { MdMovieCreation, MdMovieFilter } from 'react-icons/md';
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,16 +20,7 @@ const Sidebar = ({ children }) => {
       name: 'Movie Submissions',
       icon: <MdMovieCreation />,
     },
-    {
-      path: '/upcomingMovie',
-      name: 'Upcoming Movie',
-      icon: <MdMovieFilter />,
-    },
-    {
-      path: '/editMovie',
-      name: 'Edit Movie',
-      icon: <MdMovieEdit />,
-    },
+
     {
       path: '/',
       name: 'Logout',

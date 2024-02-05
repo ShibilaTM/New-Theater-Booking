@@ -4,6 +4,7 @@ import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } f
 import '../Sidebar/Sidebar'
 import Sidebar from '../Sidebar/Sidebar';
 import toast from 'react-hot-toast';
+import { Link } from 'react-router-dom';
 
 const AdminHome = () => {
   const [cardData, setData] = useState([]);
@@ -67,8 +68,8 @@ const AdminHome = () => {
                 color:'rgb(252, 110, 28)',
                 '&:hover': { backgroundColor: 'rgb(245, 169, 126)',
                 color:'black'
-                }}}>
-                Update
+                }}}><Link to={`/edit/`+ val._id} style={{   color:'rgb(252, 110, 28)','&:hover': { backgroundColor: 'rgb(245, 169, 126)',
+                color:'white'}}}>Update</Link>              
               </Button>
             </CardActions>
 
