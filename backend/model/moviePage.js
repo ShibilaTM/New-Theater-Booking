@@ -56,8 +56,12 @@ const moviePageSchema = new Schema({
           seatToBook:[String],
           price:Number,
           userEmail: String,
-        },
-      ]
+        }
+      ],
+    review:[{
+        star:Number,
+        comments:String
+    }]
 
 });
 

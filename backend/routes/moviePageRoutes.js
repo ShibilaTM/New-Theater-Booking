@@ -3,24 +3,13 @@ const router = express.Router()
 const jwt = require('jsonwebtoken')
 const cors = require('cors')
 const movieModel= require('../model/moviePage')
-const latestMovie = require('../model/LatestmovieSchema')
 router.use(cors())
 const mongoose = require('mongoose')
 const emailService = require('../utilities/emailService')
 
+//.............Movie Routes ............//
+
 //Posting the details of movie page
-// router.post('/createmovie', async (req, res) => {
-//     try {
-//         const {title,description,potraitImgUrl,landScapeImgUrl,rating,genre,languages,type,duration,releasedate} = req.body
-      
-//         const newMovie = new movieModel({title,description,potraitImgUrl,landScapeImgUrl,rating,genre,languages,type,duration,releasedate})
-//         const savedData= await newMovie.save()
-//         return res.status(200).json({savedData,message:'Successfully Added' });
-    
-//     } catch (error) {
-//         res.status(500).json({ error });
-//     }
-// });
 
 router.post('/createmovie', async (req, res) => {
     try {
@@ -127,46 +116,6 @@ router.post('/addcelebtomovie/:id', async (req, res) => {
   }
 });
 
-
-
-
-
-router.post('/booktickets', async (req, res) => {
-    try {
-      const { movieId, showDate, showTime, available, bookedSeats, seatToBook, price, userEmail } = req.body;
-  
-      const movie = await movieModel.findById(movieId);
-  
-      if (!movie) {
-        console.error('Movie not found');
-        return res.status(404).json({ error: 'Movie not found' });
-      }
-  
-      // Book the seats
-      const booking = {
-        showDate,
-        showTime,
-        available,
-        bookedSeats,
-        seatToBook,
-        price,
-        userEmail,
-        movieTitle: movie.title, // Assuming you have a title property in your movie object
-      };
-  
-      movie.bookings.push(booking);
-      await movie.save();
-  
-      // Send email confirmation
-      await emailService.sendConfirmationEmail(userEmail, booking);
-  
-      res.json({ message: 'Booking successful', booking });
-    } catch (error) {
-      console.error('Error booking ticket:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-
   //Update Movie
   router.put('/update/:id',async(req,res)=>{
     try {
@@ -231,6 +180,147 @@ router.get('/movie/:id', async (req, res) => {
         res.status(500).json({ error: error.message || "Internal server error" });
     }
 });
+
+
+
+//................ Book the Ticket Routes ......................//
+
+//To book tickets
+router.post('/booktickets', async (req, res) => {
+  try {
+    const { movieId, showDate, showTime, available, bookedSeats, seatToBook, price, userEmail } = req.body;
+
+    const movie = await movieModel.findById(movieId);
+
+    if (!movie) {
+      console.error('Movie not found');
+      return res.status(404).json({ error: 'Movie not found' });
+    }
+
+    // Book the seats
+    const booking = {
+      showDate,
+      showTime,
+      available,
+      bookedSeats,
+      seatToBook,
+      price,
+      userEmail,
+      movieTitle: movie.title, // Assuming you have a title property in your movie object
+    };
+
+    movie.bookings.push(booking);
+    await movie.save();
+
+    // Send email confirmation
+    await emailService.sendConfirmationEmail(userEmail, booking);
+
+    res.json({ message: 'Booking successful', booking });
+  } catch (error) {
+    console.error('Error booking ticket:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+//................ Review Routes .......................//
+
+//To add review
+router.post('/review/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const review = req.body;
+
+    if (!id) {
+      return res.status(400).json({ message: "Missing movieId in request body" });
+    }
+
+    const movie = await movieModel.findById(id);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    // Validate review object format
+    if (!review || !review.star || !review.comments) {
+      return res.status(400).json({ message: "Invalid or missing review data in request body" });
+    }
+
+    // Add review to movie's review array
+    movie.review.push(review);
+
+    await movie.save();
+
+    return res.status(200).json({ message: "Review added successfully" });
+
+  } catch (error) {
+    console.error("Error adding review to movie:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
+//To delete review
+
+router.delete('/review/:movieId/:reviewId', async (req, res) => {
+  try {
+    const { movieId, reviewId } = req.params;
+
+    if (!movieId || !reviewId) {
+      return res.status(400).json({ message: "Missing movieId or reviewId in request params" });
+    }
+
+    const movie = await movieModel.findById(movieId);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    const reviewIndex = movie.review.findIndex(review => review._id.toString() === reviewId);
+
+    if (reviewIndex === -1) {
+      return res.status(404).json({ message: "Review not found" });
+    }
+
+    // Remove the review from the movie's review array
+    movie.review.splice(reviewIndex, 1);
+
+    await movie.save();
+
+    return res.status(200).json({ message: "Review deleted successfully" });
+
+  } catch (error) {
+    console.error("Error deleting review:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+//To get the review 
+router.get('/reviews/:movieId', async (req, res) => {
+  try {
+    const movieId = req.params.movieId;
+
+    if (!movieId) {
+      return res.status(400).json({ message: "Missing movieId in request params" });
+    }
+
+    const movie = await movieModel.findById(movieId);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    const reviews = movie.review;
+
+    return res.status(200).json({ reviews });
+
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 
 
 
