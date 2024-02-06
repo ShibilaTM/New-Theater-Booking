@@ -1,0 +1,19 @@
+.add-review-link{
+    display: flex;
+    flex-direction: column;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 70%;
+}
+.add-review-link h1{
+    font-size: 25px;
+    font-weight: 600;
+    color: black;
+    width: fit-content;
+    padding: 0px 0px;
+}
+.add-review-link h2{
+    color: rgb(148, 60, 230);
+}
