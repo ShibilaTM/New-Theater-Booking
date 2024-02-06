@@ -28,17 +28,6 @@ console.log('Movie ID:', id);
     });
   };
 
-  // const addHandler = async (e) => {
-  //   try {
-  //     const payload = [cast];
-  //     console.log('Request Payload:', payload);
-  //     const response = await axios.post(`http://127.0.0.1:4000/page/addcelebtomovie/${id}`, payload);
-  //     console.log('Response:', response.data);
-  //     toast.success(response.data.message, { position: 'top-right' });
-  //   } catch (err) {
-  //     console.log('Error in axios request', err);
-  //   }
-  // };
   
   const addHandler = async (e) => {
     try {
@@ -59,9 +48,6 @@ console.log('Movie ID:', id);
     }
   };
   
-  
-  
-
 
 
   return (

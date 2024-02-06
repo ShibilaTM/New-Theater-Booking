@@ -17,19 +17,50 @@ const AdminLogin = () => {
     })
   }
 
-  const addHandler=()=>{
-    axios.post('http://127.0.0.1:4000/admin/adminlogin',admin)
-    .then((res)=>{
-      if(res.data.message==='success'){
-        sessionStorage.setItem('adminToken', res.data.token);
-        toast.success(res.data.message,{position:'top-right'})
-        navigate('/admindashboard')
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-  });
-  }
+  // const addHandler=()=>{
+  //   axios.post('http://127.0.0.1:4000/admin/adminlogin',admin)
+  //   .then((res)=>{
+  //     if(res.data.message==='success'){
+  //       sessionStorage.setItem('adminToken', res.data.token);
+  //       toast.success(res.data.message,{position:'top-right'})
+  //       navigate('/admindashboard')
+  //     }
+  //     else{
+  //       toast.error(res.data.message,{position:'top-right'})
+
+  //     }
+  //   })
+  //   .catch((error) => {
+      
+  //     console.error(error);
+  // });
+  // }
+
+  const addHandler = () => {
+    axios.post('http://127.0.0.1:4000/admin/adminlogin', admin)
+      .then((res) => {
+        if (res.data.message === 'success') {
+          sessionStorage.setItem('adminToken', res.data.token);
+          toast.success(res.data.message, { position: 'top-right' });
+          navigate('/admindashboard');
+        } else {
+          toast.error(res.data.message, { position: 'top-right' });
+        }
+      })
+      .catch((error) => {
+        // Handle errors here
+        console.error(error);
+  
+        if (error.response && error.response.status === 400) {
+          // Handle 400 Bad Request error (e.g., incorrect email or password)
+          toast.error('Incorrect email or password', { position: 'top-right' });
+        } else {
+          // Handle other errors
+          toast.error('An error occurred', { position: 'top-right' });
+        }
+      });
+  };
+  
 
   const paperStyle = { padding: 20, width: '100%', maxWidth: 400, margin: '20px auto' };
   const avatarStyle = { backgroundColor: '#005A92' };

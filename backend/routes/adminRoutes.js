@@ -14,7 +14,7 @@ router.post('/adminlogin',(req,res)=>{
             res.status(200).send({ message: 'success', token: adminToken });
         } else {
             console.log('Unauthorized'); // Log unauthorized attempts
-            res.status(401).send({ message: 'email or password is incorrect' });
+            res.status(400).send({ message: 'incorrect' });
         }
     } catch (error) {
         console.error(error);

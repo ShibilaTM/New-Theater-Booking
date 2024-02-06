@@ -32,18 +32,35 @@ const MovieSubmission = () => {
       [e.target.name]: e.target.value,
     });
   };
+
+
   const addHandler = async (e) => {
     try {
       const response = await axios.post('http://127.0.0.1:4000/page/createmovie', movie);
-      const { id, message } = response.data;
+      
+      if (response) {
+        const { id, message } = response.data;
+        setMovie(response.data);
+        toast.success(message, { position: 'top-right' });
+        navigate(`/cast/${id}`);
+      } else {
+        toast.error(response.data.message, { position: 'top-right' });
+      }
+    } catch (error) {
+      console.error(error);
   
-      setMovie(response.data);
-      toast.success(message, { position: 'top-right' });
-      navigate(`/cast/${id}`);
-    } catch (err) {
-      console.log('Error in axios request', err);
+      if (error.response && error.response.status === 400) {
+       
+        toast.error('All fields are required', { position: 'top-right' });
+      } else {
+        // Handle other errors
+        toast.error('An error occurred', { position: 'top-right' });
+      }
     }
   };
+  
+  
+
   
   
 

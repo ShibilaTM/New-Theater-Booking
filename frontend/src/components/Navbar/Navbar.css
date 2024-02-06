@@ -28,19 +28,21 @@ nav img {
     padding: 10px;
     margin-left: 10px;
     width: 400px;
+    cursor: pointer;
 }
 
 .searchbtn {
     margin-right: 5px;
     font-size: 1.2rem;
     color: rgb(78, 77, 77);
+    cursor: pointer;
 }
-
-input[type='text'] {
+.searchbox input[type='text'] {
     border: none;
     outline: none;
     background: none;
-}
+    
+} 
 .left .dropdown{
     display: flex;
     align-items: center;
