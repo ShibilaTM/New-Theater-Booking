@@ -1,83 +1,104 @@
+
+
+import { Button, Card, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Grid, Typography } from '@mui/material';
 import React, { useState } from 'react';
 import { IoMdStar, IoMdStarOutline } from 'react-icons/io';
-import './MovieReview.css';
-import axios from 'axios'
-import { useParams } from 'react-router-dom';
-import toast from 'react-hot-toast';
 
 const MovieReview = () => {
-  const [rating, setRating] = useState(Array(5).fill(false));
+  const [rating, setRating] = useState(Array(5).fill(false)); // Initialize array to keep track of star ratings
+  const [open, setOpen] = React.useState(false);
+  const [selectedValue, setSelectedValue] = useState({ title: "", query: "" });
 
-  const handleStarClick = (index) => {
+  const handleClickOpen = (val) => {
+    setSelectedValue(val);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleStarClick = index => {
     const newRating = rating.map((_, i) => i <= index);
     setRating(newRating);
-  };
-  const [comments,setComments] = useState({
-    star:'',
-    comments:''
-  })
-  const {id } = useParams()
-
-  const commentHandler = (e)=>{
-    setComments({
-      ...comments,
-      [e.target.name]:e.target.value
-    })
+    // setComments({
+    //   ...comments,
+    //   star: index + 1 // Store the selected star rating (1-indexed)
+    // });
   }
-
-  const addCommentHandler = async(e)=>{
-    await axios.post(`http://127.0.0.1:4000/page/review/${id}`,comments)
-    .then((res)=>{
-      setComments(res.data)
-      window.location.reload(false);
-      toast.success(res.data.message,{position:'top-right'})
-    })
-    .catch((error)=>{
-      if (error.response && error.response.status === 400) {
-       
-        toast.error('comments added failed', { position: 'top-right' });
-      } else {
-        // Handle other errors
-        toast.error('unauthorized', { position: 'top-right' });
-      }
-    })
-  }
-
-
   return (
-    <div className='App'>
-      <div className='popup'>
-        <div className='content'>
-          <div className='title'>
-            <h2>Movie Review</h2>
-          </div>
-          <div className='rating'>
-            <h3>Ratings</h3>
-            {rating.map((filled, index) =>
-              filled ? (
-                <IoMdStar
-                  key={index}
-                  style={{ color: 'orange' ,fontSize: '24px' }}
-                  onClick={() => handleStarClick(index)}
-                  name='star'
-                  onChange={commentHandler}
-                />
-              ) : (
-                <IoMdStarOutline
-                  key={index}
-                  style={{ color: 'orange' ,fontSize: '24px' }}
-                  onClick={() => handleStarClick(index)}
-                  name='star'
-                  onChange={commentHandler}
-                />
-              )
-            )}
-          </div>
-          <textarea placeholder='Comments here...' rows={4} name='comments' onChange={commentHandler}></textarea>
-          <button onClick={addCommentHandler}>Submit</button>
-        </div>
-      </div>
-    </div>
+    <Grid container spacing={2}>
+    <Grid item xs={12}>
+      <h1 style={{
+        padding: '50px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+        width: '70%'
+      }}>Movie Review</h1>
+    </Grid>
+    <Grid item xs={12}>
+      <Card style={{ marginLeft: "4em", width: "60%", padding: "1em", marginRight: "5em" }}>
+        <Grid container spacing={2}>
+          <Grid item xs={5} sm={9} md={10}>
+            Add Your Comments....
+          </Grid>
+          <Grid item xs={7} sm={3} md={2}>
+            <React.Fragment>
+              <Button variant="contained" style={{ backgroundColor: 'rgb(252, 110, 28)' }} onClick={handleClickOpen}>
+                Add
+              </Button>
+
+              <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+                <DialogTitle><b>Movie Review</b></DialogTitle>
+                <DialogContent>
+           
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <Typography variant="h6">Ratings</Typography>
+                      <div>
+                        {rating.map((filled, index) =>
+                          filled ? (
+                            <IoMdStar
+                              key={index}
+                              style={{ color: 'orange', fontSize: '24px' }}
+                              onClick={() => handleStarClick(index)}
+                            />
+                          ) : (
+                            <IoMdStarOutline
+                              key={index}
+                              style={{ color: 'orange', fontSize: '24px' }}
+                              onClick={() => handleStarClick(index)}
+                            />
+                          )
+                        )}
+                      </div>
+                    </Grid>
+                  </Grid>
+
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="Write your reviews..."
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    multiline
+                    rows={4}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} style={{color:'rgb(252, 110, 28)'}}>Cancel</Button>
+                  <Button onClick={handleClose} style={{color:'rgb(252, 110, 28)'}}>Add</Button>
+                </DialogActions>
+              </Dialog>
+
+            </React.Fragment>
+          </Grid>
+        </Grid>
+      </Card>
+    </Grid>
+  </Grid>
   );
 };
 

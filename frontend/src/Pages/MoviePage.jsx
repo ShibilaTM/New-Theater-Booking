@@ -17,18 +17,6 @@ const MoviePage = () => {
     const { title ,id } = useParams(); // Extract title from route parameters
 
 
-  // useEffect(() => {
-  //   console.log("Fetching data...");
-  //   axios.get(`http://127.0.0.1:4000/page/movies`)
-  //     .then((res) => {
-  //       console.log("Data fetched:", res.data);
-  //       setMoviePage(res.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error fetching data:", error);
-  //     });
-  // }, []);
-
   useEffect(() => {
     console.log("Fetching data...");
     axios.get(`http://127.0.0.1:4000/page/movies`)
