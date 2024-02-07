@@ -226,38 +226,6 @@ router.post('/booktickets', async (req, res) => {
 //................ Review Routes .......................//
 
 //To add review
-// router.post('/review/:id', async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const review = req.body;
-
-//     if (!id) {
-//       return res.status(400).json({ message: "Missing movieId in request body" });
-//     }
-
-//     const movie = await movieModel.findById(id);
-
-//     if (!movie) {
-//       return res.status(404).json({ message: "Movie not found" });
-//     }
-
-//     // Validate review object format
-//     if (!review || !review.star || !review.comments) {
-//       return res.status(400).json({ message: "Invalid or missing review data in request body" });
-//     }
-
-//     // Add review to movie's review array
-//     movie.review.push(review);
-
-//     await movie.save();
-
-//     return res.status(200).json({ message: "Review added successfully" });
-
-//   } catch (error) {
-//     console.error("Error adding review to movie:", error);
-//     return res.status(500).json({ error: "Internal server error" });
-//   }
-// });
 
 router.post('/review/:title', async (req, res) => {
   try {
@@ -299,15 +267,16 @@ router.post('/review/:title', async (req, res) => {
 
 //To delete review
 
-router.delete('/review/:movieId/:reviewId', async (req, res) => {
+router.delete('/review/:title/:reviewId', async (req, res) => {
   try {
-    const { movieId, reviewId } = req.params;
+    const { title, reviewId } = req.params;
+    const decodedTitle = decodeURIComponent(title);
 
-    if (!movieId || !reviewId) {
-      return res.status(400).json({ message: "Missing movieId or reviewId in request params" });
+    if (!decodedTitle || !reviewId) {
+      return res.status(400).json({ message: "Missing movie title or review ID in request params" });
     }
 
-    const movie = await movieModel.findById(movieId);
+    const movie = await movieModel.findOne({ title: decodedTitle });
 
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
@@ -332,16 +301,18 @@ router.delete('/review/:movieId/:reviewId', async (req, res) => {
   }
 });
 
-//To get the review 
-router.get('/reviews/:movieId', async (req, res) => {
-  try {
-    const movieId = req.params.movieId;
 
-    if (!movieId) {
-      return res.status(400).json({ message: "Missing movieId in request params" });
+//To get the review 
+router.get('/reviews/:title', async (req, res) => {
+  try {
+    const { title } = req.params;
+    const decodedTitle = decodeURIComponent(title);
+
+    if (!decodedTitle) {
+      return res.status(400).json({ message: "Missing movie title in request params" });
     }
 
-    const movie = await movieModel.findById(movieId);
+    const movie = await movieModel.findOne({ title: decodedTitle });
 
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
@@ -356,6 +327,7 @@ router.get('/reviews/:movieId', async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 
 
 

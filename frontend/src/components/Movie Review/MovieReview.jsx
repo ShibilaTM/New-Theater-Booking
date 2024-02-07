@@ -1,5 +1,4 @@
 
-
 import { Button, Card, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Grid, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -57,7 +56,7 @@ const MovieReview = () => {
       
       // console.log('star',star)
       
-      // window.location.reload(false);
+      window.location.reload(false);
       toast.success(res.data.message, { position: 'top-right' });
     } catch (error) {
       if (error.response && error.response.status === 400) {

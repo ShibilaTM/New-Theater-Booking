@@ -4,13 +4,21 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { BsFillStarFill } from "react-icons/bs";
 import './MovieCard.css'
 
-const UserMovieCard = ({ potraitImgUrl, rating, title, genre}) => {
+const UserMovieCard = ({ potraitImgUrl, rating, title, genre }) => {
     const navigate = useNavigate();
-    const {id} = useParams()
+    const { id } = useParams();
+
+    // Function to reload the page
+    const reloadPage = () => {
+        window.location.reload();
+        window.scrollTo(0, 0);
+    };
 
     const handleClick = () => {
         // Navigate to the MoviePage component with the selected movie title
         navigate(`/movie/${encodeURIComponent(title)}`);
+        // Reload the page
+        reloadPage();
     };
 
     return (
