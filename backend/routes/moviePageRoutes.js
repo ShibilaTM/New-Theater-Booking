@@ -226,16 +226,53 @@ router.post('/booktickets', async (req, res) => {
 //................ Review Routes .......................//
 
 //To add review
-router.post('/review/:id', async (req, res) => {
+// router.post('/review/:id', async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const review = req.body;
+
+//     if (!id) {
+//       return res.status(400).json({ message: "Missing movieId in request body" });
+//     }
+
+//     const movie = await movieModel.findById(id);
+
+//     if (!movie) {
+//       return res.status(404).json({ message: "Movie not found" });
+//     }
+
+//     // Validate review object format
+//     if (!review || !review.star || !review.comments) {
+//       return res.status(400).json({ message: "Invalid or missing review data in request body" });
+//     }
+
+//     // Add review to movie's review array
+//     movie.review.push(review);
+
+//     await movie.save();
+
+//     return res.status(200).json({ message: "Review added successfully" });
+
+//   } catch (error) {
+//     console.error("Error adding review to movie:", error);
+//     return res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+
+router.post('/review/:title', async (req, res) => {
   try {
-    const id = req.params.id;
+    const { title } = req.params;
+    const decodedTitle = decodeURIComponent(title);
+
+// Now use decodedTitle in your database query to find the movie
+
     const review = req.body;
 
-    if (!id) {
-      return res.status(400).json({ message: "Missing movieId in request body" });
+    if (!decodedTitle) {
+      return res.status(400).json({ message: "Missing movie title in request parameters" });
     }
 
-    const movie = await movieModel.findById(id);
+    const movie = await movieModel.findOne({ title: title });
 
     if (!movie) {
       return res.status(404).json({ message: "Movie not found" });
@@ -258,7 +295,6 @@ router.post('/review/:id', async (req, res) => {
     return res.status(500).json({ error: "Internal server error" });
   }
 });
-
 
 
 //To delete review
