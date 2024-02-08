@@ -47,15 +47,25 @@ const moviePageSchema = new Schema({
         celebRole:String,
         celebImage:String
     }],
+    tickets:[{
+        showDate:Date,
+        showTime:String,
+        numberOfSeats:Number,
+        bookedSeats:Number,
+        // seatsAvailabe:Number,
+        ticketRates:Number
+    }],
     bookings: [
         {
           showDate:String,
           showTime: String,
-          available:[String],
-          bookedSeats:[String],
-          seatToBook:[String],
+          selectedSeats:[String],
           price:Number,
-          userEmail: String,
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'userdata', 
+            required: true,
+          },
         }
       ],
     review:[{

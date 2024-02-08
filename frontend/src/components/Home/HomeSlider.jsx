@@ -10,12 +10,21 @@ import { EffectCoverflow, Pagination } from 'swiper/modules';
 
 const HomeSlider = () => {
   const [banners, setBanners] = useState([]);
+  
   useEffect(() => {
-    axios.get('http://127.0.0.1:4000/upcoming/getall').then((res) => {
-      setBanners(res.data); // Set the entire array as the new state
-      console.log(banners);
-    })
+    axios.get('http://127.0.0.1:4000/page/poster')
+      .then((res) => {
+        if (Array.isArray(res.data.movies)) {
+          setBanners(res.data.movies);
+        } else {
+          console.error("Data is not an array:", res.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
   }, []);
+  
 
   return (
     <>
@@ -39,7 +48,7 @@ const HomeSlider = () => {
       >
         {banners.map((banner, index) => (
           <SwiperSlide key={index}>
-            <img src={banner.imageUrl} alt={`slide image ${index + 1}`} />
+            <img src={banner.potraitImgUrl} alt={`slide image ${index + 1}`} />
           </SwiperSlide>
         ))}
       </Swiper>

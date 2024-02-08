@@ -16,9 +16,6 @@ app.use(express.urlencoded({ extended: true }))
 const userRoutes= require('./routes/userRoutes')
 app.use('/user',userRoutes)
 
-const upcomingMovie = require('./routes/upMovieRoutes')
-app.use('/upcoming',upcomingMovie)
-
 const moviePage = require('./routes/moviePageRoutes')
 app.use('/page',moviePage)
 

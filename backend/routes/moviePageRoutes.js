@@ -76,7 +76,15 @@ router.get('/getmovie/:id', async (req, res) => {
     }
 });
 
-
+//Get the portrait image for home page
+router.get('/poster', async (req, res) => {
+  try {
+    const movies = await movieModel.find({}, ' potraitImgUrl');
+    res.status(200).json({ movies });
+  } catch (error) {
+    res.status(500).json({ error });
+  }
+});
 
 //To add cast
 router.post('/addcelebtomovie/:id', async (req, res) => {
@@ -185,27 +193,89 @@ router.get('/movie/:id', async (req, res) => {
 
 //................ Book the Ticket Routes ......................//
 
-//To book tickets
-router.post('/booktickets', async (req, res) => {
+// POST route for creating tickets for a specific movie
+
+router.post('/tickets/:id', async (req, res) => {
   try {
-    const { movieId, showDate, showTime, available, bookedSeats, seatToBook, price, userEmail } = req.body;
+    const id = req.params.id;
+    const { tickets } = req.body; // Extract tickets array from req.body
 
-    const movie = await movieModel.findById(movieId);
+    if (!id) {
+      return res.status(400).json({ message: "Missing movieId in request body" });
+    }
 
+    const movie = await movieModel.findById(id);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    if (!tickets || !Array.isArray(tickets)) {
+      return res.status(400).json({ message: "Invalid or missing tickets array in request body" });
+    }
+
+    const releaseDate = new Date(movie.releasedate);
+
+    // Loop through each ticket and validate the showDate
+    for (const ticket of tickets) {
+      const selectedDate = new Date(ticket.showDate);
+
+      if (selectedDate < releaseDate) {
+        return res.status(400).json({ error: 'Show date must be after release date' });
+      }
+    }
+
+    // Assuming all celebrities are of type "cast"
+    const newTickets = tickets.map(({ showDate, showTime, numberOfSeats,bookedSeats, ticketRates }) => ({
+      showDate,
+      showTime,
+      numberOfSeats,
+      bookedSeats,
+      ticketRates
+    }));
+
+    movie.tickets.push(...newTickets);
+    await movie.save();
+
+    return res.status(200).json({ message: 'Tickets created successfully' });
+  } catch (error) {
+    console.error("Error adding Tickets to movie:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+
+
+
+//To book tickets
+router.post('/booktickets/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { showDate, showTime, selectedSeats, pricePerSeat, userId } = req.body;
+
+    const movie = await movieModel.findById(id);
     if (!movie) {
       console.error('Movie not found');
       return res.status(404).json({ error: 'Movie not found' });
     }
 
+    // Find the user using the provided userId
+    const user = await userModel.findById(userId);
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Calculate the total price based on the number of seats
+    const totalPrice = numberOfSeats * pricePerSeat;
+
     // Book the seats
     const booking = {
       showDate,
       showTime,
-      available,
-      bookedSeats,
-      seatToBook,
-      price,
-      userEmail,
+      selectedSeats,
+      totalPrice,
+      userEmail: user.email, // Retrieve user email from the user object
       movieTitle: movie.title, // Assuming you have a title property in your movie object
     };
 
@@ -213,7 +283,7 @@ router.post('/booktickets', async (req, res) => {
     await movie.save();
 
     // Send email confirmation
-    await emailService.sendConfirmationEmail(userEmail, booking);
+    await emailService.sendConfirmationEmail(user.email, booking);
 
     res.json({ message: 'Booking successful', booking });
   } catch (error) {
@@ -221,7 +291,6 @@ router.post('/booktickets', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 
 //................ Review Routes .......................//
 

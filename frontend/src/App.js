@@ -14,6 +14,7 @@ import MovieTicketBooking from './Pages/BuyTickets/MovieTicketBooking';
 import MovieSubmission from './Admin/AdminHome/MovieSubmission';
 import CastSubmission from './Admin/AdminHome/CastSubmission';
 import EditMovie from './Admin/AdminHome/EditMovie';
+import UserProfile from './Pages/UserProfile';
 
 
 
@@ -27,6 +28,7 @@ function App() {
         <Route path='/signup' element={<Signup/>}/>
         <Route path='/adminlog' element={<AdminLogin/>}/>
         <Route path="/movie/:title" element={<UserMain child={<MoviePageFinal/>} />}/> 
+        <Route path="/profile" element={<UserMain child={<UserProfile/>} />}/> 
         <Route path="/buytickets/:id" element={<UserMain child={<MovieTicketBooking/>} />}/>
        
         {/* Admin Routes */}

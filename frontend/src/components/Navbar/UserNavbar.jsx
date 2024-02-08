@@ -17,7 +17,7 @@ const UserNavbar = () => {
     <div className='right'>
             <Link className='signup' to={'/user'}>Home</Link>
             <Link className='signup' to={'/'}>Logout</Link>
-            <Link className='linkstylenone'>
+            <Link className='linkstylenone' to={'/profile'}>
                 <BiUserCircle className='theme_icon1'/>
             </Link>
         
