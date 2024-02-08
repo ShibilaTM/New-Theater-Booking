@@ -1,203 +1,134 @@
-.center {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(
-      to right,
-      rgb(162, 216, 162),
-      rgb(102, 194, 102)
-    );
-  }
-  .tickets {
-    width: 550px;
-    height: fit-content;
-    border: 0.4mm solid rgba(0, 0, 0, 0.08);
-    border-radius: 3mm;
-    box-sizing: border-box;
-    padding: 10px;
-    font-family: poppins;
-    max-height: 96vh;
-    overflow: auto;
-    background: white;
-    box-shadow: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
-  }
-  .ticket-selector {
-    background: rgb(243, 243, 243);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: column;
-    box-sizing: border-box;
-    padding: 20px;
-  }
-  .head {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 30px;
-  }
-  .title {
-    font-size: 16px;
-    font-weight: 600;
-  }
-  .seats {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    min-height: 150px;
-    position: relative;
-  }
-  .status {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-  }
-  .seats::before {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translate(-50%, 0);
-    width: 220px;
-    height: 7px;
-    background: rgb(141, 198, 255);
-    border-radius: 0 0 3mm 3mm;
-    border-top: 0.3mm solid rgb(180, 180, 180);
-  }
-  .item {
-    font-size: 12px;
-    position: relative;
-  }
-  .item::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: -12px;
-    transform: translate(0, -50%);
-    width: 10px;
-    height: 10px;
-    background: rgb(255, 255, 255);
-    outline: 0.2mm solid rgb(120, 120, 120);
-    border-radius: 0.3mm;
-  }
-  .item:nth-child(2)::before {
-    background: rgb(180, 180, 180);
-    outline: none;
-  }
-  .item:nth-child(3)::before {
-    background: rgb(28, 185, 120);
-    outline: none;
-  }
-  .all-seats {
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    grid-gap: 15px;
-    margin: 60px 0;
-    margin-top: 20px;
-    position: relative;
-  }
-  .seat {
-    width: 20px;
-    height: 20px;
-    background: white;
-    border-radius: 0.5mm;
-    outline: 0.3mm solid rgb(180, 180, 180);
-    cursor: pointer;
-  }
-  .all-seats input:checked + label {
-    background: rgb(28, 185, 120);
-    outline: none;
-  }
-  .seat.booked {
-    background: rgb(180, 180, 180);
-    outline: none;
-  }
-  input {
-    display: none;
-  }
-  .timings {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 30px;
-  }
-  .dates {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .dates-item {
-    width: 50px;
-    height: 40px;
-    background: rgb(233, 233, 233);
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    padding: 10px 0;
-    border-radius: 2mm;
-    cursor: pointer;
-  }
-  .day {
-    font-size: 12px;
-  }
-  .times {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  .time {
-    font-size: 14px;
-    width: fit-content;
-    padding: 7px 14px;
-    background: rgb(233, 233, 233);
-    border-radius: 2mm;
-    cursor: pointer;
-  }
-  .timings input:checked + label {
-    background: rgb(28, 185, 120);
-    color: white;
-  }
-  .price {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .total {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    font-size: 16px;
-    font-weight: 500;
-  }
-  .total span {
-    font-size: 11px;
-    font-weight: 400;
-  }
-  .price button {
-    background: rgb(60, 60, 60);
-    color: white;
-    font-family: poppins;
-    font-size: 14px;
-    padding: 7px 14px;
-    border-radius: 2mm;
-    outline: none;
-    border: none;
-    cursor: pointer;
-  }
+.buytickets .head{
+  background-color:rgb(97, 94, 94);
+  padding: 20px;
+}
+.buytickets{
+  background-color: rgb(228, 228, 228);
+  min-height: 100vh;
+  width: 100%;
+}
+.buytickets .s1{
+  background-color: white;
+}
+.buytickets .s1 .head h1{
+  color: white;
+  font-size: 35px;
+  font-weight: 600;
+}
+.buytickets .s1 .head h4{
+  color: rgb(19, 18, 18);
+  font-size: 16px;
+  font-weight: 600; 
+  margin-top: 10px; 
+}
+
+.buytickets .s1 .head h5{
+  color: rgb(214, 204, 204);
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 10px;
+  border: 1px solid gray;
+  padding: 5px 20px;
+  border-radius: 25px;
+  width: fit-content;
+}
+
+.buytickets .tickets{
+  width: 80%;
+  margin: 20px auto;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+.buytickets .tickets h2{
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+}
+.buytickets .tickets .main{
+  
+  text-align: center;
+}
+.buytickets .tickets input{
+  margin-top: 20px;
+  height: 30px;
+  width: 230px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid gray;
+  border-radius: 25px;
+}
+.buytickets .tickets .showTime{
+  
+  text-align: center;
+}
+.buytickets .tickets .email{
+  text-align: center;
+}
+.buytickets .tickets .price{
+  text-align: center;
+}
+.buytickets .seats label {
+  display: inline-block;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  align-items: center;
+  margin-left: 30px;
+}
+.buytickets .seats h3 {
+  margin-left: 30px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.buytickets .seats input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  text-align: center;
+}
+
+.buytickets .seats .seat-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+}
+
+.buytickets .seats label {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 14px;
+  color: #333;
+  background-color: #fff;
+}
+
+.buytickets .seats label.booked {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.buytickets .tickets .price button{
+  margin-top: 20px;
+  height: 30px;
+  width: 200px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid gray;
+  border-radius: 25px;
+  background-color:  rgb(252, 110, 28);
+  color: #fff;
+  cursor: pointer;
+}
+.buytickets .seats label.selected {
+  background-color: green;
+  color: white; /* Text color for better visibility */
+}

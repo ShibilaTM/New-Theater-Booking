@@ -51,21 +51,17 @@ const moviePageSchema = new Schema({
         showDate:Date,
         showTime:String,
         numberOfSeats:Number,
-        bookedSeats:Number,
+        bookedSeats:[Number],
         // seatsAvailabe:Number,
         ticketRates:Number
     }],
     bookings: [
         {
           showDate:String,
-          showTime: String,
-          selectedSeats:[String],
-          price:Number,
-          userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'userdata', 
-            required: true,
-          },
+        //   showTime: String,
+          selectedSeats:[Number],
+          pricePerSeat:Number,
+          userEmail:String
         }
       ],
     review:[{

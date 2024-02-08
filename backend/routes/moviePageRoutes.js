@@ -251,7 +251,7 @@ router.post('/tickets/:id', async (req, res) => {
 router.post('/booktickets/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const { showDate, showTime, selectedSeats, pricePerSeat, userId } = req.body;
+    const { showDate, selectedSeats, pricePerSeat, userEmail } = req.body;
 
     const movie = await movieModel.findById(id);
     if (!movie) {
@@ -259,31 +259,31 @@ router.post('/booktickets/:id', async (req, res) => {
       return res.status(404).json({ error: 'Movie not found' });
     }
 
-    // Find the user using the provided userId
-    const user = await userModel.findById(userId);
-    if (!user) {
-      console.error('User not found');
-      return res.status(404).json({ error: 'User not found' });
-    }
+     // Check if any selected seats are already booked
+     const alreadyBookedSeats = selectedSeats.filter(seat => movie.tickets[0].bookedSeats.includes(seat));
+     if (alreadyBookedSeats.length > 0) {
+       return res.status(400).json({ error: 'One or more selected seats are already booked' });
+     }
 
     // Calculate the total price based on the number of seats
-    const totalPrice = numberOfSeats * pricePerSeat;
+    const totalPrice = selectedSeats.length * pricePerSeat;
 
     // Book the seats
     const booking = {
       showDate,
-      showTime,
+      showTime:movie.tickets[0].showTime,
       selectedSeats,
       totalPrice,
-      userEmail: user.email, // Retrieve user email from the user object
+      userEmail, // Retrieve user email from the user object
       movieTitle: movie.title, // Assuming you have a title property in your movie object
     };
 
     movie.bookings.push(booking);
+    movie.tickets[0].bookedSeats = [...movie.tickets[0].bookedSeats, ...selectedSeats];
     await movie.save();
 
     // Send email confirmation
-    await emailService.sendConfirmationEmail(user.email, booking);
+    await emailService.sendConfirmationEmail(userEmail, booking);
 
     res.json({ message: 'Booking successful', booking });
   } catch (error) {

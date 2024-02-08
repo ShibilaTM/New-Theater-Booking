@@ -36,6 +36,7 @@ console.log('Movie ID:', id);
       const response = await axios.post(`http://127.0.0.1:4000/page/addcelebtomovie/${id}`, payload);
       console.log('Response:', response.data);
       toast.success(response.data.message, { position: 'top-right' });
+      window.location.reload(false);
   
       // Update local state with the new cast information
       setCast({
