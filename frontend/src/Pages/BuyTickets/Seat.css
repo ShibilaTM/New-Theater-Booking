@@ -130,5 +130,5 @@
 }
 .buytickets .seats label.selected {
   background-color: green;
-  color: white; /* Text color for better visibility */
+  color: white; 
 }

@@ -47,11 +47,42 @@ const MovieTicketBooking = () => {
         });
     };
     
+    // const addHandler = async() => {
+    //     try {
+    //         const { showDate, selectedSeats, userEmail } = bookings;
+    //         const totalPrice = selectedSeats.length * movieDetails.tickets[0].ticketRates; // Calculate total price
+    //         console.log('totalPrice',totalPrice)
+    //         const response = await axios.post(`http://127.0.0.1:4000/page/booktickets/${id}`, {
+    //             showDate,
+    //             selectedSeats,
+    //             pricePerSeat: movieDetails.ticketRate, 
+    //             userEmail 
+    //         });
+    //         toast.success(response.data.message, { position: 'top-right' });
+    //         window.location.reload(false);
+    //     } catch (error) {
+    //         if (error.response && error.response.status === 400) {
+    //             toast.error('Booking failed', { position: 'top-right' });
+    //         } else {
+    //             toast.error('Unauthorized', { position: 'top-right' });
+    //         }
+    //     }
+    // };
     const addHandler = async() => {
+    
         try {
             const { showDate, selectedSeats, userEmail } = bookings;
             const totalPrice = selectedSeats.length * movieDetails.tickets[0].ticketRates; // Calculate total price
-            console.log('totalPrice',totalPrice)
+                  // Check if any required field is empty
+        if (!bookings.showDate|| !bookings.selectedSeats.length ||!bookings.userEmail) {
+            toast.error('All fields are required', { position: 'top-right' });
+            return;
+        }
+            // Debugging: Log totalPrice, selectedSeats.length, and movieDetails.tickets[0].ticketRates
+            console.log('Total Price:', totalPrice);
+            console.log('Selected Seats Length:', selectedSeats.length);
+            console.log('Ticket Rates:', movieDetails.tickets[0].ticketRates);
+    
             const response = await axios.post(`http://127.0.0.1:4000/page/booktickets/${id}`, {
                 showDate,
                 selectedSeats,
@@ -68,6 +99,7 @@ const MovieTicketBooking = () => {
             }
         }
     };
+    
     
 
     const generateCheckboxes = () => {
@@ -116,7 +148,7 @@ const MovieTicketBooking = () => {
                         <h2>Movie Ticket Booking</h2>
                     </div>
                     <div className="main">
-                        <input type="date" name="showDate" onChange={e => setDate(e.target.value)} />
+                        <input type="date" name="showDate" onChange={e => {setDate(e.target.value);inputHandler(e)}} />
                     </div>
                     <div className="showTime">
                         <input type='text' value={movieDetails.tickets[0]?.showTime} />
