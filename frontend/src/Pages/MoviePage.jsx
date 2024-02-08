@@ -9,6 +9,7 @@ import MovieCarousel from '../components/Home/MovieCarousel/MovieCarousel';
 import CelebCard from './CelebCard/CelebCard';
 import './MoviePage.css';
 import UseMovieCarousel from '../components/Home/MovieCarousel/UseMovieCarousel';
+import axiosInstance from '../axiosInterceptor';
 
 const MoviePage = () => {
   const [moviePage, setMoviePage] = useState([]);
@@ -19,7 +20,7 @@ const MoviePage = () => {
 
   useEffect(() => {
     console.log("Fetching data...");
-    axios.get(`http://127.0.0.1:4000/page/movies`)
+    axiosInstance.get(`http://127.0.0.1:4000/page/movies`)
     .then((res) => {
       console.log("Data fetched:", res.data);
       setMoviePage(res.data);

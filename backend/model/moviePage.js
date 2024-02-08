@@ -57,11 +57,15 @@ const moviePageSchema = new Schema({
     }],
     bookings: [
         {
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'userdata' // Reference to the User model
+            },
           showDate:String,
         //   showTime: String,
           selectedSeats:[Number],
           pricePerSeat:Number,
-          userEmail:String
+        //   userEmail:String
         }
       ],
     review:[{

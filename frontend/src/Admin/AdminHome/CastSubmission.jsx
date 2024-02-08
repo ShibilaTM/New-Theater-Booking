@@ -4,6 +4,7 @@ import Sidebar from '../Sidebar/Sidebar';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom'; // Import useParams
+import axiosInstance from '../../axiosInterceptor';
 
 const labelprops = {
   mt: 1,
@@ -33,7 +34,7 @@ console.log('Movie ID:', id);
     try {
       const payload = [cast];
       console.log('Request Payload:', payload);
-      const response = await axios.post(`http://127.0.0.1:4000/page/addcelebtomovie/${id}`, payload);
+      const response = await axiosInstance.post(`http://127.0.0.1:4000/page/addcelebtomovie/${id}`, payload);
       console.log('Response:', response.data);
       toast.success(response.data.message, { position: 'top-right' });
       window.location.reload(false);

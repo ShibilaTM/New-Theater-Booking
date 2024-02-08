@@ -4,6 +4,7 @@ import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
+import axiosInstance from '../../axiosInterceptor';
 
 const labelprops = {
   mt: 1,
@@ -32,7 +33,7 @@ const EditMovie = () => {
   }
 
   useEffect(()=>{
-    axios.get(`http://127.0.0.1:4000/page/movie/${id}`)
+    axiosInstance.get(`http://127.0.0.1:4000/page/movie/${id}`)
     .then((response)=>{
       setMovieDetails(response.data)
     }).catch((error)=>{
@@ -42,7 +43,7 @@ const EditMovie = () => {
 
   const addChangeHandler = async(e)=>{
     e.preventDefault()
-    await axios.put(`http://127.0.0.1:4000/page/update/${id}`,movieDetails)
+    await axiosInstance.put(`http://127.0.0.1:4000/page/update/${id}`,movieDetails)
     .then((response)=>{
       toast.success(response.data.message,{position:'top-right'})
       navigate('/admindashboard')

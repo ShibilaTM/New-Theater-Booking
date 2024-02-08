@@ -33,6 +33,9 @@ const Login = () => {
       if (response.data.message === 'success') {
         const userEmail = user.email; 
         console.log('Successfully logged in as:', userEmail);
+        sessionStorage.setItem("userToken",response.data.token)
+        console.log('User token stored in sessionStorage:', sessionStorage.getItem('userToken'));
+
         navigate('/user'); 
         toast.success(response.data.message,{position:'top-center'})
       } else {

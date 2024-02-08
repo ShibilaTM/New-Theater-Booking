@@ -5,19 +5,20 @@ import '../Sidebar/Sidebar'
 import Sidebar from '../Sidebar/Sidebar';
 import toast from 'react-hot-toast';
 import { Link } from 'react-router-dom';
+import axiosInstance from '../../axiosInterceptor';
 
 const AdminHome = () => {
   const [cardData, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:4000/page/movies').then((res) => {
+    axiosInstance.get('http://127.0.0.1:4000/page/movies').then((res) => {
       setData(res.data); // Set the entire array as the new state
       console.log(cardData);
     });
   }, []);
 
   const deleteMovie = async(movieId)=>{
-    await axios.delete(`http://localhost:4000/page/remove/${movieId}`)
+    await axiosInstance.delete(`http://localhost:4000/page/remove/${movieId}`)
     .then((response)=>{ 
         setData((prevMovie)=>prevMovie.filter((val)=>val._id !==movieId))
         toast.success(response.data.message,{position:'top-right'})

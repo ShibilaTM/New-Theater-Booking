@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { IoMdStar, IoMdStarOutline } from 'react-icons/io';
 import { useParams } from 'react-router-dom';
+import axiosInstance from '../../axiosInterceptor';
 
 const MovieReview = () => {
   const [rating, setRating] = useState(Array(5).fill(false)); // Initialize array to keep track of star ratings
@@ -48,7 +49,7 @@ const MovieReview = () => {
       const decodedTitle = decodeURIComponent(title);
   
       // Make the POST request with the decoded title
-      const res = await axios.post(`http://127.0.0.1:4000/page/review/${decodedTitle}`, comments);
+      const res = await axiosInstance.post(`http://127.0.0.1:4000/page/review/${decodedTitle}`, comments);
       setComments({
         star: 0,
         comments: '' // Update the field name to 'comments'

@@ -8,6 +8,7 @@ import 'swiper/css/pagination';
 import './GetReviewCard.css';
 import { useParams } from 'react-router-dom';
 import GetReviewCard from './GetReviewCard';
+import axiosInstance from '../../axiosInterceptor';
 
 const GetReview = () => {
     const [getReviews, setgetReviews] = useState([]);
@@ -17,7 +18,7 @@ const GetReview = () => {
         const fetchData = async () => {
           try {
             const decodedTitle = decodeURIComponent(title);
-            const response = await axios.get(`http://127.0.0.1:4000/page/reviews/${decodedTitle}`);
+            const response = await axiosInstance.get(`http://127.0.0.1:4000/page/reviews/${decodedTitle}`);
             console.log('Received data from backend:', response.data);
         
             // Ensure response.data.reviews is an array

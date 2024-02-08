@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import axios from 'axios';
 import UserMovieCard from './UserMovieCard';
+import axiosInstance from '../../../axiosInterceptor';
 
 const UseMovieCarousel = () => {
     const [movies, setMovies] = useState([]);
@@ -14,7 +15,7 @@ const UseMovieCarousel = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:4000/page/getmovies');
+                const response = await axiosInstance.get('http://127.0.0.1:4000/page/getmovies');
                 console.log('Received data from backend:', response.data);
 
                 // Ensure response.data is an array

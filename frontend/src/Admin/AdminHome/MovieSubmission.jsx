@@ -4,6 +4,7 @@ import { Box, Button, FormLabel, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
+import axiosInstance from '../../axiosInterceptor';
 
 const labelprops = {
   mt: 1,
@@ -36,7 +37,7 @@ const MovieSubmission = () => {
 
   const addHandler = async (e) => {
     try {
-      const response = await axios.post('http://127.0.0.1:4000/page/createmovie', movie);
+      const response = await axiosInstance.post('http://127.0.0.1:4000/page/createmovie', movie);
       
       if (response) {
         const { id, message } = response.data;

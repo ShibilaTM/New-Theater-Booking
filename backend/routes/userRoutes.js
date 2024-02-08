@@ -60,9 +60,9 @@ router.post('/login', async (req, res) => {
             if (password === user.password) {
                 let payload = { email: user.email, userId: user._id }; // Include other relevant information in the payload
                 
-                let token = jwt.sign(payload, 'TheaterBookingKey');
+                let userToken = jwt.sign(payload, 'TheaterBookingKey');
                
-                res.status(200).send({ message: 'success', token: token });
+                res.status(200).send({ message: 'success', token:userToken,payload });
             } else {
                 res.status(401).send({ message: 'Invalid password' });
             }

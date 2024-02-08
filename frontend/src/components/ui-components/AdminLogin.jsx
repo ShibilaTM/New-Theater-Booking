@@ -42,6 +42,7 @@ const AdminLogin = () => {
         if (res.data.message === 'success') {
           sessionStorage.setItem('adminToken', res.data.token);
           toast.success(res.data.message, { position: 'top-right' });
+          sessionStorage.setItem("adminToken",res.data.token)
           navigate('/admindashboard');
         } else {
           toast.error(res.data.message, { position: 'top-right' });

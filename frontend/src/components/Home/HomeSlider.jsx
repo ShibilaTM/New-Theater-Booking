@@ -7,12 +7,13 @@ import 'swiper/css/pagination';
 import './styles.css';
 import axios from 'axios';
 import { EffectCoverflow, Pagination } from 'swiper/modules';
+import axiosInstance from '../../axiosInterceptor';
 
 const HomeSlider = () => {
   const [banners, setBanners] = useState([]);
   
   useEffect(() => {
-    axios.get('http://127.0.0.1:4000/page/poster')
+    axiosInstance.get('http://127.0.0.1:4000/page/poster')
       .then((res) => {
         if (Array.isArray(res.data.movies)) {
           setBanners(res.data.movies);
