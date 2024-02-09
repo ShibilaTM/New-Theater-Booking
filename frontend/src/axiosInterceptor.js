@@ -12,6 +12,8 @@ axiosInstance.interceptors.request.use((config) => {
         config.headers['Authorization'] = `Bearer ${userToken}`;
     } else if (adminToken) {
         config.headers['Authorization'] = `Bearer ${adminToken}`;
+        console.log('Token sent:', config.headers['Authorization']);
+
     }
 
     return config;

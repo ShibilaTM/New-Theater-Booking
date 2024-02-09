@@ -28,7 +28,8 @@ const userSchema = new Schema({
             },
             message:'Password must be 8-12 characters and include at least one uppercase letter, one lowercase letter, and one digit'
         }
-    }
+    },
+    bookings:[]
 })
 
 

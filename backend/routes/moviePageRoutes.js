@@ -9,21 +9,6 @@ const emailService = require('../utilities/emailService')
 const userData = require('../model/userData')
 
 
-// Admin token verification middleware
-function adminVerifyToken(req, res, next) {
-  try {
-      const token = req.headers.Authorization;
-      if (!token) throw 'Token not provided';
-
-      const payload = jwt.verify(token, 'adminMovieApp');
-      if (!payload) throw 'Invalid token';
-      req.authAdmin = payload; // Set authUser property
-      next();
-  } catch (error) {
-      console.error(error);
-      res.status(401).send('Unauthorized: ' + error);
-  }
-}
 
 // User token verification middleware
 function userVerifyToken(req, res, next) {
@@ -47,7 +32,7 @@ function userVerifyToken(req, res, next) {
 
 //Posting the details of movie page
 
-router.post('/createmovie',adminVerifyToken, async (req, res) => {
+router.post('/createmovie', async (req, res) => {
     try {
       const { title, description, potraitImgUrl, landScapeImgUrl, rating, genre, languages, type, duration, releasedate } = req.body;
      // Validate if any trimmed field is empty
@@ -123,7 +108,7 @@ router.get('/poster', async (req, res) => {
 });
 
 //To add cast
-router.post('/addcelebtomovie/:id',adminVerifyToken, async (req, res) => {
+router.post('/addcelebtomovie/:id', async (req, res) => {
   try {
       const id = req.params.id
       const cast  = req.body;
@@ -161,7 +146,7 @@ router.post('/addcelebtomovie/:id',adminVerifyToken, async (req, res) => {
 });
 
   //Update Movie
-  router.put('/update/:id',adminVerifyToken,async(req,res)=>{
+  router.put('/update/:id',async(req,res)=>{
     try {
       const id = req.params.id
       const movieExist = await movieModel.findById(id)
@@ -177,7 +162,7 @@ router.post('/addcelebtomovie/:id',adminVerifyToken, async (req, res) => {
   })
   
   //Delete movie 
-  router.delete('/remove/:id',adminVerifyToken,async(req,res)=>{
+  router.delete('/remove/:id',async(req,res)=>{
     try {
         const id = req.params.id
         const movieExist = await movieModel.findById(id)
@@ -231,7 +216,7 @@ router.get('/movie/:id', async (req, res) => {
 
 // POST route for creating tickets for a specific movie
 
-router.post('/tickets/:id',adminVerifyToken, async (req, res) => {
+router.post('/tickets/:id', async (req, res) => {
   try {
     const id = req.params.id;
     const { tickets } = req.body; // Extract tickets array from req.body
@@ -281,54 +266,7 @@ router.post('/tickets/:id',adminVerifyToken, async (req, res) => {
 });
 
 
-
-
 //To book tickets
-// router.post('/booktickets/:id', async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const { showDate, selectedSeats, pricePerSeat, userEmail } = req.body;
-
-//     const movie = await movieModel.findById(id);
-//     if (!movie) {
-//       console.error('Movie not found');
-//       return res.status(404).json({ error: 'Movie not found' });
-//     }
-
-//      // Check if any selected seats are already booked
-//      const alreadyBookedSeats = selectedSeats.filter(seat => movie.tickets[0].bookedSeats.includes(seat));
-//      if (alreadyBookedSeats.length > 0) {
-//        return res.status(400).json({ error: 'One or more selected seats are already booked' });
-//      }
-
-//     // Calculate the total price based on the number of seats
-//     const totalPrice = selectedSeats.length * pricePerSeat;
-
-//     // Book the seats
-//     const booking = {
-//       showDate,
-//       showTime:movie.tickets[0].showTime,
-//       selectedSeats,
-//       totalPrice,
-//       userEmail, // Retrieve user email from the user object
-//       movieTitle: movie.title, // Assuming you have a title property in your movie object
-//     };
-
-//     movie.bookings.push(booking);
-//     movie.tickets[0].bookedSeats = [...movie.tickets[0].bookedSeats, ...selectedSeats];
-//     await movie.save();
-
-//     // Send email confirmation
-//     await emailService.sendConfirmationEmail(userEmail, booking);
-
-//     res.json({ message: 'Booking successful', booking });
-//   } catch (error) {
-//     console.error('Error booking ticket:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
-
-
 
 router.post('/booktickets/:id',userVerifyToken, async (req, res) => {
   try {
@@ -369,12 +307,15 @@ const token = authorizationHeader.split(' ')[1];
 
     // Book the seats
     const booking = {
+      user:user._id,
       showDate,
       showTime: movie.tickets[0].showTime,
       selectedSeats,
       totalPrice,
       movieTitle: movie.title,
     };
+    movie.bookings.push(booking);
+    await movie.save();
 
     // Add the booking to the user's bookings array
    // Assuming user is properly initialized
@@ -383,10 +324,9 @@ if (!user.bookings) {
 }
 
 // Now you can safely push a value to the bookings array
-user.bookings.push(booking);
-
+    user.bookings.push(booking);
     await user.save();
-
+ 
     // Update movie's booked seats
     movie.tickets[0].bookedSeats = [...movie.tickets[0].bookedSeats, ...selectedSeats];
     await movie.save();
@@ -400,6 +340,98 @@ user.bookings.push(booking);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+//To get the booked details
+router.get('/bookedtickets', userVerifyToken, async (req, res) => {
+  try {
+    // Decode the JWT token to retrieve user's email
+    const authorizationHeader = req.headers.Authorization || req.headers.authorization;
+    if (!authorizationHeader) {
+      return res.status(401).json({ error: 'Authorization header is missing' });
+    }
+    const token = authorizationHeader.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'TheaterBookingKey');
+    const userEmail = decodedToken.email;
+
+    // Find the user by email
+    const user = await userData.findOne({ email: userEmail }).populate('bookings');
+
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Extract relevant information from user's bookings
+    const bookedTickets = user.bookings.map(booking => ({
+      movieTitle: booking.movieTitle,
+      showDate: booking.showDate,
+      showTime: booking.showTime,
+      selectedSeats: booking.selectedSeats,
+      totalPrice: booking.totalPrice
+    }));
+
+    res.json({ user: { name: user.name, email: user.email }, bookedTickets });
+  } catch (error) {
+    console.error('Error fetching booked tickets:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+//To delete the bookings
+router.delete('/bookings/:showDate/:showTime/:movieTitle', userVerifyToken, async (req, res) => {
+  try {
+    const { showDate, showTime, movieTitle } = req.params;
+    
+    // Find the user by email
+    const authorizationHeader = req.headers.Authorization || req.headers.authorization;
+    if (!authorizationHeader) {
+      return res.status(401).json({ error: 'Authorization header is missing' });
+    }
+    const token = authorizationHeader.split(' ')[1];
+    const decodedToken = jwt.verify(token, 'TheaterBookingKey');
+    const userEmail = decodedToken.email;
+    const user = await userData.findOne({ email: userEmail });
+
+    // Check if user exists
+    if (!user) {
+      console.error('User not found');
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Find the booking by matching showDate, showTime, and movieTitle
+    const bookingIndex = user.bookings.findIndex(booking => booking.showDate === showDate && booking.showTime === showTime && booking.movieTitle === movieTitle);
+
+    // Check if the booking exists
+    if (bookingIndex === -1) {
+      console.error('Booking not found');
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    const booking = user.bookings[bookingIndex];
+
+    // Remove the booking from the user's bookings array
+    user.bookings.splice(bookingIndex, 1);
+    await user.save();
+
+    // Remove the booking from the movie's bookings array (assuming movie is properly initialized)
+    // For this example, assume that movieTitle uniquely identifies the movie
+    const movie = await movieModel.findOne({ title: movieTitle });
+    if (!movie) {
+      console.error('Movie not found');
+      return res.status(404).json({ error: 'Movie not found' });
+    }
+    const movieBookingIndex = movie.bookings.findIndex(movieBooking => movieBooking.showDate === showDate && movieBooking.showTime === showTime && movieBooking.movieTitle === movieTitle);
+    if (movieBookingIndex !== -1) {
+      movie.bookings.splice(movieBookingIndex, 1);
+      await movie.save();
+    }
+
+    res.json({ message: 'Booking deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting booking:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 
 //................ Review Routes .......................//

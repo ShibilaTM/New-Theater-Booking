@@ -20,7 +20,7 @@ const sendConfirmationEmail = async (userEmail, booking) => {
     },
     to: [userEmail],
     subject: 'Movie Booking Confirmation',
-    text: `Dear User,\n\nYour movie ticket booking has been confirmed!\n\nDetails:\nMovie: ${booking.movieTitle}\n\nShow Time: ${booking.showTime}\nSeat Number: ${booking.selectedSeats}\n\nThank you for choosing our service!`,
+    text: `Dear User,\n\nYour movie ticket booking has been confirmed!\n\nDetails:\nMovie: ${booking.movieTitle}\nShow Date: ${booking.showDate}\nShow Time: ${booking.showTime}\nSeat Number: ${booking.selectedSeats}\n\nThank you for choosing our service!`,
   };
 
   try {

@@ -43,6 +43,7 @@ const AdminLogin = () => {
           sessionStorage.setItem('adminToken', res.data.token);
           toast.success(res.data.message, { position: 'top-right' });
           sessionStorage.setItem("adminToken",res.data.token)
+          console.log('User token stored in sessionStorage:', sessionStorage.getItem('adminToken'));
           navigate('/admindashboard');
         } else {
           toast.error(res.data.message, { position: 'top-right' });

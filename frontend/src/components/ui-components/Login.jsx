@@ -2,7 +2,7 @@ import { Button, Grid, TextField, Paper } from '@mui/material';
 import axios from 'axios';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const Login = () => {
     password: '',
   });
   const [error, setError] = useState('');
-
+  const {userId} = useParams()
   const inputHandler = (e) => {
     setUser({
       ...user,
@@ -34,6 +34,8 @@ const Login = () => {
         const userEmail = user.email; 
         console.log('Successfully logged in as:', userEmail);
         sessionStorage.setItem("userToken",response.data.token)
+        localStorage.setItem('userToken',response.data.token)
+        localStorage.setItem('userId', userId); 
         console.log('User token stored in sessionStorage:', sessionStorage.getItem('userToken'));
 
         navigate('/user'); 

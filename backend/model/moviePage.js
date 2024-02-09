@@ -57,7 +57,7 @@ const moviePageSchema = new Schema({
     }],
     bookings: [
         {
-            user: {
+            userId: {
                 type: Schema.Types.ObjectId,
                 ref: 'userdata' // Reference to the User model
             },
