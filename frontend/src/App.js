@@ -15,6 +15,8 @@ import MovieSubmission from './Admin/AdminHome/MovieSubmission';
 import CastSubmission from './Admin/AdminHome/CastSubmission';
 import EditMovie from './Admin/AdminHome/EditMovie';
 import UserProfile from './Pages/UserProfile';
+import TicketRates from './Admin/AdminHome/TicketRates';
+import EditTickets from './Admin/AdminHome/EditTickets';
 
 
 
@@ -35,7 +37,8 @@ function App() {
         <Route path="/admindashboard" element={<AdminHome/>}/>
         <Route path='/moviesubmission' element={<MovieSubmission/>}/>
         <Route path='/cast/:id' element={<CastSubmission/>}/>
-        <Route path='/edit/:id' element={<EditMovie/>}/>
+        <Route path='/edit/:id' element={<EditTickets/>}/>
+        <Route path='/tickets/:id' element={<TicketRates/>}/>
         
       </Routes>
     </div>

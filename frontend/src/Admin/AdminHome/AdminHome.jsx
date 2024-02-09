@@ -69,6 +69,14 @@ const AdminHome = () => {
                 color:'rgb(252, 110, 28)',
                 '&:hover': { backgroundColor: 'rgb(245, 169, 126)',
                 color:'black'
+                }}}><Link to={`/tickets/`+ val._id} style={{   color:'rgb(252, 110, 28)','&:hover': { backgroundColor: 'rgb(245, 169, 126)',
+                color:'white'}}}>Tickets</Link>              
+              </Button>
+              <Button size="small" 
+              sx={{ 
+                color:'rgb(252, 110, 28)',
+                '&:hover': { backgroundColor: 'rgb(245, 169, 126)',
+                color:'black'
                 }}}><Link to={`/edit/`+ val._id} style={{   color:'rgb(252, 110, 28)','&:hover': { backgroundColor: 'rgb(245, 169, 126)',
                 color:'white'}}}>Update</Link>              
               </Button>

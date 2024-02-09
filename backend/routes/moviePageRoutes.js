@@ -216,10 +216,59 @@ router.get('/movie/:id', async (req, res) => {
 
 // POST route for creating tickets for a specific movie
 
+// router.post('/tickets/:id', async (req, res) => {
+//   try {
+//     const id = req.params.id;
+//     const  tickets  = req.body; // Extract tickets array from req.body
+
+//     if (!id) {
+//       return res.status(400).json({ message: "Missing movieId in request body" });
+//     }
+
+//     const movie = await movieModel.findById(id);
+
+//     if (!movie) {
+//       return res.status(404).json({ message: "Movie not found" });
+//     }
+
+//     if (!tickets || !Array.isArray(tickets)) {
+//       return res.status(400).json({ message: "Invalid or missing tickets array in request body" });
+//     }
+
+//     const releaseDate = new Date(movie.releasedate);
+
+//     // Loop through each ticket and validate the showDate
+//     for (const ticket of tickets) {
+//       const selectedDate = new Date(ticket.showDate);
+
+//       if (selectedDate < releaseDate) {
+//         return res.status(400).json({ error: 'Show date must be after release date' });
+//       }
+//     }
+
+//     // Assuming all celebrities are of type "cast"
+//     const newTickets = tickets.map(({ showDate, showTime, numberOfSeats,bookedSeats, ticketRates }) => ({
+//       showDate,
+//       showTime,
+//       numberOfSeats,
+//       bookedSeats,
+//       ticketRates
+//     }));
+
+//     movie.tickets.push(...newTickets);
+//     await movie.save();
+
+//     return res.status(200).json({ message: 'Tickets created successfully' });
+//   } catch (error) {
+//     console.error("Error adding Tickets to movie:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
+
 router.post('/tickets/:id', async (req, res) => {
   try {
     const id = req.params.id;
-    const { tickets } = req.body; // Extract tickets array from req.body
+    const tickets = req.body; // Extract tickets array from req.body
 
     if (!id) {
       return res.status(400).json({ message: "Missing movieId in request body" });
@@ -235,6 +284,11 @@ router.post('/tickets/:id', async (req, res) => {
       return res.status(400).json({ message: "Invalid or missing tickets array in request body" });
     }
 
+    // Check if there are already tickets associated with the movie
+    if (movie.tickets.length > 0) {
+      return res.status(400).json({ message: "Tickets have already been added for this movie" });
+    }
+
     const releaseDate = new Date(movie.releasedate);
 
     // Loop through each ticket and validate the showDate
@@ -242,12 +296,12 @@ router.post('/tickets/:id', async (req, res) => {
       const selectedDate = new Date(ticket.showDate);
 
       if (selectedDate < releaseDate) {
-        return res.status(400).json({ error: 'Show date must be after release date' });
+        return res.status(404).json({ error: 'Show date must be after release date' });
       }
     }
 
     // Assuming all celebrities are of type "cast"
-    const newTickets = tickets.map(({ showDate, showTime, numberOfSeats,bookedSeats, ticketRates }) => ({
+    const newTickets = tickets.map(({ showDate, showTime, numberOfSeats, bookedSeats, ticketRates }) => ({
       showDate,
       showTime,
       numberOfSeats,
@@ -264,6 +318,32 @@ router.post('/tickets/:id', async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+
+
+//to update the tickets
+
+router.put('/tickets/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const movie = await movieModel.findById(id);
+    
+    if (!movie) {
+      return res.status(404).json({ message: 'Movie not found' });
+    }
+    
+    const data = req.body;
+    // Assuming you want to update the tickets field of the movie document
+    movie.tickets = data; // Replace the existing tickets with the new ones
+    const updatedMovie = await movie.save();
+    
+    res.status(200).json({ message: 'Tickets updated successfully', updatedMovie });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+
 
 
 //To book tickets
@@ -318,12 +398,11 @@ const token = authorizationHeader.split(' ')[1];
     await movie.save();
 
     // Add the booking to the user's bookings array
-   // Assuming user is properly initialized
 if (!user.bookings) {
   user.bookings = []; // Initialize bookings array if it doesn't exist
 }
 
-// Now you can safely push a value to the bookings array
+
     user.bookings.push(booking);
     await user.save();
  
@@ -340,6 +419,8 @@ if (!user.bookings) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
 //To get the booked details
 router.get('/bookedtickets', userVerifyToken, async (req, res) => {
   try {
