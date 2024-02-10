@@ -35,7 +35,7 @@ const AdminHome = () => {
         <Grid item key={i} xs={12} sm={6} md={4}>
           <Card sx={{ 
             maxWidth: 250,
-            height:400,
+            height:420,
             borderRadius:5,
             ":hover":{
               boxShadow:'10px 10px 20px #ccc'

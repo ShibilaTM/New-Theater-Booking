@@ -9,6 +9,7 @@ import { FaInstagram } from "react-icons/fa";
 import { FaLinkedin } from "react-icons/fa";
 import { FaRegCopyright } from "react-icons/fa";
 import './Footer.css'
+import { Link } from 'react-router-dom';
 
 const UserFooter = () => {
     return (
@@ -26,9 +27,7 @@ const UserFooter = () => {
                 </div>
                 <div className="sb_footer-links-div">
                     <h4>Quick Links</h4>
-                    <a href="/">
-                        <p>Logout</p>
-                    </a>
+                    <Link to={'/logout'}>Logout</Link>
                     
                 </div>
                 <div className="sb_footer-links-div">

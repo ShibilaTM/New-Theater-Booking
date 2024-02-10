@@ -5,6 +5,7 @@ import { FaTh, FaBars } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import { IoLogOut } from 'react-icons/io5';
 import { MdMovieCreation, MdMovieFilter } from 'react-icons/md';
+import { BsTicketDetailedFill } from "react-icons/bs";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,7 +21,11 @@ const Sidebar = ({ children }) => {
       name: 'Movie Submissions',
       icon: <MdMovieCreation />,
     },
-
+    {
+      path: '/ticketsSold',
+      name: 'Sold Tickets',
+      icon: <BsTicketDetailedFill />
+    },
     {
       path: '/',
       name: 'Logout',

@@ -22,17 +22,22 @@ const UserProfile = () => {
       });
   }, []);
 
-  const handleDelete = async (showDate, showTime, movieTitle) => {
+  const handleDelete = async (movieId, bookingId) => {
     try {
-      if (!showDate || !showTime || !movieTitle) { // Make sure to use || instead of commas
-        console.error('Invalid credentials:', showDate, showTime, movieTitle);
+      if (!movieId || !bookingId) {
+        console.error('Invalid credentials:', movieId, bookingId);
         return;
       }
   
       // Send a DELETE request to the backend API to delete the booking
-      const response = await axiosInstance.delete(`http://127.0.0.1:4000/bookings/${showDate}/${showTime}/${encodeURIComponent(movieTitle)}`); // Encode movieTitle
+      const response = await axiosInstance.delete(`http://127.0.0.1:4000/bookings/${movieId}/${bookingId}`);
+      
       // Handle successful deletion
       console.log('Booking deleted successfully:', response.data.message);
+      
+      // Remove the deleted booking from the local state
+      setBookings(prevBookings => prevBookings.filter(booking => booking._id !== bookingId));
+      
       // Implement any further logic if needed, such as updating the UI or fetching updated data
     } catch (error) {
       // Handle error
@@ -41,9 +46,6 @@ const UserProfile = () => {
     }
   };
   
-  
-  
-
   return (
     <Box width={"100%"} display="flex">
       <Fragment>
@@ -123,11 +125,11 @@ const UserProfile = () => {
                     </ListItemText>
                
                     <IconButton
-                      onClick={() => handleDelete(booking.showDate, booking.showTime, booking.movieTitle)}
-                      color="error"
-                    >
-                      <DeleteForeverIcon />
-                    </IconButton>
+            onClick={() => handleDelete(booking.movieId, booking._id)}
+            color="error"
+          >
+            <DeleteForeverIcon />
+          </IconButton>
                   </ListItem>
                 ))}
               </List>

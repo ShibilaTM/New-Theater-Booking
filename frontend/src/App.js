@@ -17,6 +17,9 @@ import EditMovie from './Admin/AdminHome/EditMovie';
 import UserProfile from './Pages/UserProfile';
 import TicketRates from './Admin/AdminHome/TicketRates';
 import EditTickets from './Admin/AdminHome/EditTickets';
+import TicketsSold from './Admin/AdminHome/TicketsSold';
+import { RequireAuth } from './Auth';
+import { Logout } from './Logout';
 
 
 
@@ -25,20 +28,22 @@ function App() {
     <div>
       <Routes>
         <Route path='/' element={<Main child={<Home />} />}/>
-        <Route path='/user' element={<UserMain child={<UserHome />} />}/>
         <Route path='/login' element={<Login/>}/>
-        <Route path='/signup' element={<Signup/>}/>
-        <Route path='/adminlog' element={<AdminLogin/>}/>
-        <Route path="/movie/:title" element={<UserMain child={<MoviePageFinal/>} />}/> 
-        <Route path="/profile" element={<UserMain child={<UserProfile/>} />}/> 
-        <Route path="/buytickets/:id" element={<UserMain child={<MovieTicketBooking/>} />}/>
+        <Route path='/signup' element={<Signup/>}/>  
+        <Route path='/user' element={<RequireAuth><UserMain child={<UserHome />} /></RequireAuth>}/>     
+        <Route path="/movie/:title" element={<RequireAuth><UserMain child={<MoviePageFinal/>} /></RequireAuth>}/> 
+        <Route path="/profile" element={<RequireAuth><UserMain child={<UserProfile/>} /></RequireAuth>}/> 
+        <Route path="/buytickets/:id" element={<RequireAuth><UserMain child={<MovieTicketBooking/>} /></RequireAuth>}/>
+        <Route path='/logout' element={<Logout />}></Route>
        
         {/* Admin Routes */}
+        <Route path='/adminlog' element={<AdminLogin/>}/>
         <Route path="/admindashboard" element={<AdminHome/>}/>
         <Route path='/moviesubmission' element={<MovieSubmission/>}/>
         <Route path='/cast/:id' element={<CastSubmission/>}/>
         <Route path='/edit/:id' element={<EditTickets/>}/>
         <Route path='/tickets/:id' element={<TicketRates/>}/>
+        <Route path='/ticketsSold' element={<TicketsSold/>}/>
         
       </Routes>
     </div>

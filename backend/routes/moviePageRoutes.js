@@ -458,9 +458,9 @@ router.get('/bookedtickets', userVerifyToken, async (req, res) => {
 });
 
 //To delete the bookings
-router.delete('/bookings/:showDate/:showTime/:movieTitle', userVerifyToken, async (req, res) => {
+router.delete('/bookings/:movieId/:bookingId', userVerifyToken, async (req, res) => {
   try {
-    const { showDate, showTime, movieTitle } = req.params;
+    const { movieId, bookingId } = req.params;
     
     // Find the user by email
     const authorizationHeader = req.headers.Authorization || req.headers.authorization;
@@ -478,8 +478,8 @@ router.delete('/bookings/:showDate/:showTime/:movieTitle', userVerifyToken, asyn
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Find the booking by matching showDate, showTime, and movieTitle
-    const bookingIndex = user.bookings.findIndex(booking => booking.showDate === showDate && booking.showTime === showTime && booking.movieTitle === movieTitle);
+    // Find the booking by matching movieId and bookingId
+    const bookingIndex = user.bookings.findIndex(booking => booking.movieId === movieId && booking._id.toString() === bookingId);
 
     // Check if the booking exists
     if (bookingIndex === -1) {
@@ -487,24 +487,9 @@ router.delete('/bookings/:showDate/:showTime/:movieTitle', userVerifyToken, asyn
       return res.status(404).json({ error: 'Booking not found' });
     }
 
-    const booking = user.bookings[bookingIndex];
-
     // Remove the booking from the user's bookings array
     user.bookings.splice(bookingIndex, 1);
     await user.save();
-
-    // Remove the booking from the movie's bookings array (assuming movie is properly initialized)
-    // For this example, assume that movieTitle uniquely identifies the movie
-    const movie = await movieModel.findOne({ title: movieTitle });
-    if (!movie) {
-      console.error('Movie not found');
-      return res.status(404).json({ error: 'Movie not found' });
-    }
-    const movieBookingIndex = movie.bookings.findIndex(movieBooking => movieBooking.showDate === showDate && movieBooking.showTime === showTime && movieBooking.movieTitle === movieTitle);
-    if (movieBookingIndex !== -1) {
-      movie.bookings.splice(movieBookingIndex, 1);
-      await movie.save();
-    }
 
     res.json({ message: 'Booking deleted successfully' });
   } catch (error) {
@@ -515,16 +500,18 @@ router.delete('/bookings/:showDate/:showTime/:movieTitle', userVerifyToken, asyn
 
 
 
+
+
 //................ Review Routes .......................//
 
 //To add review
 
-router.post('/review/:title', async (req, res) => {
+router.post('/review/:title',userVerifyToken, async (req, res) => {
   try {
     const { title } = req.params;
     const decodedTitle = decodeURIComponent(title);
 
-// Now use decodedTitle in your database query to find the movie
+// Now use decodedTitle in database query to find the movie
 
     const review = req.body;
 
@@ -595,7 +582,7 @@ router.delete('/review/:title/:reviewId', async (req, res) => {
 
 
 //To get the review 
-router.get('/reviews/:title', async (req, res) => {
+router.get('/reviews/:title',userVerifyToken, async (req, res) => {
   try {
     const { title } = req.params;
     const decodedTitle = decodeURIComponent(title);
@@ -620,9 +607,35 @@ router.get('/reviews/:title', async (req, res) => {
   }
 });
 
+router.get('/tickets-sold-per-day', async (req, res) => {
+  try {
+    // Aggregate bookings by movieTitle and showDate and count the number of tickets sold for each date and movie
+    const ticketsSoldPerDay = await movieModel.aggregate([
+      {
+        $unwind: '$bookings' // Deconstruct the bookings array
+      },
+      {
+        $group: {
+          _id: { movieTitle: '$bookings.movieTitle', showDate: '$bookings.showDate' }, // Group by movieTitle and showDate
+          totalTicketsSold: { $sum: { $size: '$bookings.selectedSeats' } } // Count the number of tickets sold for each date and movie
+        }
+      },
+      {
+        $sort: { '_id.showDate': 1 } // Sort by showDate in ascending order
+      }
+    ]);
 
+    res.json({ ticketsSoldPerDay });
+  } catch (error) {
+    console.error('Error fetching tickets sold per day:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 
 
 module.exports = router
+
+
+
