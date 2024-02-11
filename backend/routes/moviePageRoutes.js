@@ -216,54 +216,6 @@ router.get('/movie/:id', async (req, res) => {
 
 // POST route for creating tickets for a specific movie
 
-// router.post('/tickets/:id', async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const  tickets  = req.body; // Extract tickets array from req.body
-
-//     if (!id) {
-//       return res.status(400).json({ message: "Missing movieId in request body" });
-//     }
-
-//     const movie = await movieModel.findById(id);
-
-//     if (!movie) {
-//       return res.status(404).json({ message: "Movie not found" });
-//     }
-
-//     if (!tickets || !Array.isArray(tickets)) {
-//       return res.status(400).json({ message: "Invalid or missing tickets array in request body" });
-//     }
-
-//     const releaseDate = new Date(movie.releasedate);
-
-//     // Loop through each ticket and validate the showDate
-//     for (const ticket of tickets) {
-//       const selectedDate = new Date(ticket.showDate);
-
-//       if (selectedDate < releaseDate) {
-//         return res.status(400).json({ error: 'Show date must be after release date' });
-//       }
-//     }
-
-//     // Assuming all celebrities are of type "cast"
-//     const newTickets = tickets.map(({ showDate, showTime, numberOfSeats,bookedSeats, ticketRates }) => ({
-//       showDate,
-//       showTime,
-//       numberOfSeats,
-//       bookedSeats,
-//       ticketRates
-//     }));
-
-//     movie.tickets.push(...newTickets);
-//     await movie.save();
-
-//     return res.status(200).json({ message: 'Tickets created successfully' });
-//   } catch (error) {
-//     console.error("Error adding Tickets to movie:", error);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
 
 router.post('/tickets/:id', async (req, res) => {
   try {
@@ -506,7 +458,7 @@ router.delete('/bookings/:movieId/:bookingId', userVerifyToken, async (req, res)
 
 //To add review
 
-router.post('/review/:title',userVerifyToken, async (req, res) => {
+router.post('/review/:title', async (req, res) => {
   try {
     const { title } = req.params;
     const decodedTitle = decodeURIComponent(title);
@@ -582,7 +534,7 @@ router.delete('/review/:title/:reviewId', async (req, res) => {
 
 
 //To get the review 
-router.get('/reviews/:title',userVerifyToken, async (req, res) => {
+router.get('/reviews/:title', async (req, res) => {
   try {
     const { title } = req.params;
     const decodedTitle = decodeURIComponent(title);

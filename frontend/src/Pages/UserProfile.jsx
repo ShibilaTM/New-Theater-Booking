@@ -22,29 +22,29 @@ const UserProfile = () => {
       });
   }, []);
 
-  const handleDelete = async (movieId, bookingId) => {
-    try {
-      if (!movieId || !bookingId) {
-        console.error('Invalid credentials:', movieId, bookingId);
-        return;
-      }
+  // const handleDelete = async (movieId, bookingId) => {
+  //   try {
+  //     if (!movieId || !bookingId) {
+  //       console.error('Invalid credentials:', movieId, bookingId);
+  //       return;
+  //     }
   
-      // Send a DELETE request to the backend API to delete the booking
-      const response = await axiosInstance.delete(`http://127.0.0.1:4000/bookings/${movieId}/${bookingId}`);
+  //     // Send a DELETE request to the backend API to delete the booking
+  //     const response = await axiosInstance.delete(`http://127.0.0.1:4000/bookings/${movieId}/${bookingId}`);
       
-      // Handle successful deletion
-      console.log('Booking deleted successfully:', response.data.message);
+  //     // Handle successful deletion
+  //     console.log('Booking deleted successfully:', response.data.message);
       
-      // Remove the deleted booking from the local state
-      setBookings(prevBookings => prevBookings.filter(booking => booking._id !== bookingId));
+  //     // Remove the deleted booking from the local state
+  //     setBookings(prevBookings => prevBookings.filter(booking => booking._id !== bookingId));
       
-      // Implement any further logic if needed, such as updating the UI or fetching updated data
-    } catch (error) {
-      // Handle error
-      console.error('Error deleting booking:', error.response.data.error);
-      // Implement error handling logic if needed
-    }
-  };
+  //     // Implement any further logic if needed, such as updating the UI or fetching updated data
+  //   } catch (error) {
+  //     // Handle error
+  //     console.error('Error deleting booking:', error.response.data.error);
+  //     // Implement error handling logic if needed
+  //   }
+  // };
   
   return (
     <Box width={"100%"} display="flex">
@@ -124,12 +124,12 @@ const UserProfile = () => {
                       Show Time: {booking.showTime}
                     </ListItemText>
                
-                    <IconButton
+                    {/* <IconButton
             onClick={() => handleDelete(booking.movieId, booking._id)}
             color="error"
           >
             <DeleteForeverIcon />
-          </IconButton>
+          </IconButton> */}
                   </ListItem>
                 ))}
               </List>
